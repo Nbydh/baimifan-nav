@@ -60,6 +60,25 @@ padding:20px 20px 12px;min-height:100vh;
 .add-tile .shortcut-icon{background:transparent;border:2px dashed var(--border);font-size:26px;color:var(--text-secondary);font-weight:400;}
 .add-tile:hover .shortcut-icon,.add-tile:active .shortcut-icon{border-color:var(--accent);color:var(--accent);}
 .add-tile .shortcut-name{color:var(--text-secondary);}
+.note-card{width:100%;background:var(--card-bg);border-radius:var(--card-radius);box-shadow:var(--shadow);padding:14px 16px;display:flex;flex-direction:column;gap:8px;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));}
+.note-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.note-title{font-size:13px;font-weight:600;color:var(--text);letter-spacing:1px;}
+.note-edit{background:none;border:1px solid var(--border);color:var(--text-secondary);font-size:12px;padding:4px 10px;border-radius:10px;cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;}
+.note-edit:hover{color:var(--accent);border-color:var(--accent);}
+.note-body{font-size:13px;line-height:1.7;color:var(--text-secondary);max-height:180px;overflow-y:auto;letter-spacing:0.3px;user-select:text;-webkit-user-select:text;word-break:break-word;}
+.note-body h2,.note-body h3,.note-body h4,.note-body h5,.note-body h6{color:var(--text);margin:8px 0 4px;letter-spacing:0.5px;}
+.note-body h2{font-size:16px;}.note-body h3{font-size:15px;}.note-body h4,.note-body h5,.note-body h6{font-size:14px;}
+.note-body p{margin:2px 0;}
+.note-body a{color:var(--accent);text-decoration:underline;}
+.note-body code{background:var(--bg);padding:1px 5px;border-radius:4px;font-size:12px;color:var(--accent);}
+.note-body pre{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;overflow-x:auto;font-size:12px;line-height:1.6;}
+.note-body pre code{background:none;padding:0;}
+.note-body blockquote{border-left:3px solid var(--accent);padding-left:10px;margin:6px 0;opacity:0.8;}
+.note-body ul,.note-body ol{margin:4px 0;padding-left:20px;}
+.note-body li{margin:2px 0;}
+.note-body hr{border:none;border-top:1px solid var(--border);margin:8px 0;}
+.note-empty{color:var(--text-secondary);opacity:0.6;font-size:12px;letter-spacing:1px;}
+.note-editor{min-height:220px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.7;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
 .shortcuts{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px;}
 .shortcut-item{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:14px 6px;border-radius:var(--card-radius);background:var(--card-bg);box-shadow:var(--shadow);transition:all 0.2s ease;text-decoration:none;color:var(--text);-webkit-tap-highlight-color:transparent;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));}
@@ -264,10 +283,14 @@ body.edit-mode .sc-delete{display:flex;}
 </div>
 <div class="shortcuts" id="shortcuts"></div>
 <button class="sc-fold" id="foldBtn" title="展开全部" aria-label="展开全部"><svg class="sc-fold-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path></svg></button>
+<div class="note-card" id="noteCard">
+<div class="note-head"><span class="note-title">📝 记事本</span><button class="note-edit" id="noteEditBtn" type="button">✏️ 编辑</button></div>
+<div class="note-body" id="noteBody"></div>
+</div>
 </div>
 <div class="footer">
 <div class="footer-row"><span class="deco">◈</span><span class="line"></span><span class="brand">白米饭</span><span class="dot">·</span><span>导航</span><span class="line"></span><span class="deco">◈</span></div>
-<div class="footer-row" style="font-size:10px;opacity:0.4;letter-spacing:1px;">v5.5 · 添加图标版<button class="clg-btn" id="clgBtn" type="button">📜 更新内容</button></div>
+<div class="footer-row" style="font-size:10px;opacity:0.4;letter-spacing:1px;">v5.6 · 记事本版<button class="clg-btn" id="clgBtn" type="button">📜 更新内容</button></div>
 </div>
 </div><!-- /page-scroll -->
 <button class="settings-fab" id="settingsBtn" title="设置" aria-label="设置"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M19.14 12.94a7.07 7.07 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.04 7.04 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.58.24-1.12.55-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L2.31 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.05.31-.09.63-.09.94s.04.63.09.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.31.61.22l2.39-.96c.5.39 1.04.71 1.62.94l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.58-.24 1.12-.55 1.62-.94l2.39.96c.22.09.48 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"></path></svg></button>
@@ -285,7 +308,15 @@ body.edit-mode .sc-delete{display:flex;}
 </ul>
 </div>
 <div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#8b5cf6,#e91e8c)">当前版</span><span class="clg-vname">v5.5 · 添加图标版</span></div>
+<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#8b5cf6,#e91e8c)">当前版</span><span class="clg-vname">v5.6 · 记事本版</span></div>
+<ul>
+<li>📝 新增「记事本」小组件：支持 Markdown 编辑与渲染</li>
+<li>标题 / 加粗 / 斜体 / 列表 / 引用 / 代码块 / 链接均可使用</li>
+<li>内容自动保存在浏览器本地</li>
+</ul>
+</div>
+<div class="clg-ver">
+<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#607d8b,#455a64)">v5.5</span><span class="clg-vname">添加图标版</span></div>
 <ul>
 <li>➕ 书签末尾新增「添加图标」，点击即可手动添加网址</li>
 <li>📚 默认书签精简为 GitHub / 知乎</li>
@@ -426,6 +457,7 @@ body.edit-mode .sc-delete{display:flex;}
 <li><span class="tag">布局调节</span>：页面整体上下微调，底部功能固定不动。</li>
 <li><span class="tag">书签管理</span>：支持 JSON 导入导出备份、一键恢复默认。</li>
 <li><span class="tag">多引擎搜索</span>：百度 / 谷歌 / 必应 / 鸭鸭走 / 搜狗 一键切换，支持添加自定义引擎。</li>
+<li><span class="tag">记事本</span>：Markdown 小组件，随手记，自动保存。</li>
 </ul>
 <p style="margin-top:4px;">白米饭导航，愿你的每次浏览都心情舒畅 🌾</p>
 </div></div>
@@ -444,6 +476,7 @@ body.edit-mode .sc-delete{display:flex;}
 <li><strong>布局调节：</strong>「页面整体」滑块微调内容位置，底部功能区固定。</li>
 <li><strong>书签备份：</strong>书签可导出 JSON / 导入恢复 / 一键恢复默认。</li>
 <li><strong>更新内容：</strong>页脚「<span class="tag">📜 更新内容</span>」查看版本更新日志。</li>
+<li><strong>记事本：</strong>页面下方「<span class="tag">📝 记事本</span>」小组件，点击「✏️ 编辑」写笔记，支持 <span class="tag">Markdown</span>（# 标题、**加粗**、- 列表、`代码`、[链接](url)），保存后自动渲染。</li>
 <li><strong>数据隐私：</strong>所有书签与设置仅保存在本地，不上传任何服务器。</li>
 </ul></div></div>
 </div>
@@ -467,6 +500,11 @@ body.edit-mode .sc-delete{display:flex;}
 <div class="modal-field"><label class="modal-label">搜索地址</label><input class="modal-input" id="engineAddUrl" type="text" placeholder="https://www.baidu.com/s?wd=%s" autocomplete="off"></div>
 <p class="engine-hint">用 <code>%s</code> 代表搜索词，例如 <code>https://www.baidu.com/s?wd=%s</code>；没写 %s 会自动补上。</p>
 <div class="modal-actions"><button class="modal-btn cancel" id="engineAddCancel" type="button">取消</button><button class="modal-btn save" id="engineAddSave" type="button">添加</button></div>
+</div></div>
+<div class="modal-overlay" id="noteOverlay"><div class="modal-sheet" id="noteSheet">
+<div class="modal-handle"></div><div class="modal-title">📝 记事本 · Markdown</div>
+<textarea class="modal-input note-editor" id="noteEditor" placeholder="支持 Markdown：# 标题、**加粗**、- 列表、`代码`、[链接](url)"></textarea>
+<div class="modal-actions"><button class="modal-btn cancel" id="noteCancel" type="button">取消</button><button class="modal-btn save" id="noteSave" type="button">保存</button></div>
 </div></div>
 <script>
 (function(){
@@ -1087,7 +1125,7 @@ scCont.addEventListener('contextmenu',function(e){
 // 触屏长按统一阻止浏览器默认菜单(复制/选择等)，避免与长按拖动排序冲突；输入框保留
 document.addEventListener('contextmenu',function(e){
   if(e.button===2)return;
-  if(e.target.closest('input,textarea'))return;
+  if(e.target.closest('input,textarea,.note-body'))return;
   e.preventDefault();
 });
 // 桌面: 长按拖动排序 + 双击编辑
@@ -1649,6 +1687,63 @@ document.getElementById('folderNameSave').addEventListener('click',saveFolderNam
 document.getElementById('folderNameCancel').addEventListener('click',function(){frOverlay.classList.remove('active');});
 frOverlay.addEventListener('click',function(e){if(e.target===frOverlay)frOverlay.classList.remove('active');});
 frInput.addEventListener('keydown',function(e){if(e.key==='Enter')saveFolderName();});
+// 记事本小组件(Markdown)
+var noteText='';
+try{noteText=localStorage.getItem('via_note')||'';}catch(e){}
+function escNote(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function inlineMd(s){
+var tokens=[];
+function tok(html){tokens.push(html);return '\u0000'+(tokens.length-1)+'\u0000';}
+s=s.replace(/`([^`]+)`/g,function(m,c){return tok('<code>'+c+'</code>');});
+s=s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,function(m,t,u){return (u&&/^(https?:\/\/|#)/i.test(u))?tok('<a href="'+u+'" target="_blank" rel="noopener">'+t+'</a>'):t;});
+s=s.replace(/\*\*([^*]+)\*\*/g,function(m,t){return '<strong>'+t+'</strong>';});
+s=s.replace(/\*([^*]+)\*/g,function(m,t){return '<em>'+t+'</em>';});
+s=s.replace(/(https?:\/\/[^\s<>"']+)/g,function(m){return '<a href="'+m+'" target="_blank" rel="noopener">'+m+'</a>';});
+s=s.replace(/\u0000(\d+)\u0000/g,function(m,i){return tokens[+i];});
+return s;
+}
+function mdToHtml(md){
+var lines=String(md==null?'':md).replace(/\r\n?/g,'\n').split('\n');
+var out=[],inCode=false,codeBuf=[],list=null;
+function flushList(){if(list){out.push('<'+list.type+'>'+list.items.join('')+'</'+list.type+'>');list=null;}}
+for(var i=0;i<lines.length;i++){
+var line=lines[i];
+if(/^\s*```/.test(line)){
+if(inCode){out.push('<pre><code>'+escNote(codeBuf.join('\n'))+'</code></pre>');codeBuf=[];inCode=false;}
+else{inCode=true;}
+continue;
+}
+if(inCode){codeBuf.push(line);continue;}
+if(/^\s*$/.test(line)){flushList();continue;}
+var h=line.match(/^(#{1,6})\s+(.*)$/);
+if(h){flushList();var lv=Math.min(6,h[1].length+1);out.push('<h'+lv+'>'+inlineMd(escNote(h[2]))+'</h'+lv+'>');continue;}
+if(/^>\s?/.test(line)){flushList();out.push('<blockquote>'+inlineMd(escNote(line.replace(/^>\s?/,'')))+'</blockquote>');continue;}
+if(/^[-*+]\s+/.test(line)){if(!list||list.type!=='ul'){flushList();list={type:'ul',items:[]};}list.items.push('<li>'+inlineMd(escNote(line.replace(/^[-*+]\s+/,'')))+'</li>');continue;}
+if(/^\d+\.\s+/.test(line)){if(!list||list.type!=='ol'){flushList();list={type:'ol',items:[]};}list.items.push('<li>'+inlineMd(escNote(line.replace(/^\d+\.\s+/,'')))+'</li>');continue;}
+if(/^(-{3,}|\*{3,}|_{3,})$/.test(line.trim())){flushList();out.push('<hr>');continue;}
+flushList();
+out.push('<p>'+inlineMd(escNote(line))+'</p>');
+}
+if(inCode){out.push('<pre><code>'+escNote(codeBuf.join('\n'))+'</code></pre>');}
+flushList();
+return out.join('');
+}
+function renderNote(){
+var nb=document.getElementById('noteBody');if(!nb)return;
+if(!noteText||!noteText.trim()){nb.innerHTML='<div class="note-empty">点击「✏️ 编辑」写点什么吧…</div>';return;}
+nb.innerHTML=mdToHtml(noteText);
+}
+var noteOverlay=document.getElementById('noteOverlay'),noteEditor=document.getElementById('noteEditor');
+function openNote(){if(!noteOverlay||!noteEditor)return;noteEditor.value=noteText;noteOverlay.classList.add('active');try{setTimeout(function(){noteEditor.focus();},300);}catch(e){}}
+function closeNote(){if(noteOverlay)noteOverlay.classList.remove('active');}
+function saveNote(){noteText=noteEditor.value;try{localStorage.setItem('via_note',noteText);}catch(e){}renderNote();closeNote();showToast('记事本已保存');}
+var noteEditBtn=document.getElementById('noteEditBtn'),noteBodyEl=document.getElementById('noteBody'),noteSaveEl=document.getElementById('noteSave'),noteCancelEl=document.getElementById('noteCancel');
+if(noteEditBtn)noteEditBtn.addEventListener('click',openNote);
+if(noteBodyEl)noteBodyEl.addEventListener('click',function(e){if(e.target.closest('a'))return;openNote();});
+if(noteSaveEl)noteSaveEl.addEventListener('click',saveNote);
+if(noteCancelEl)noteCancelEl.addEventListener('click',closeNote);
+if(noteOverlay)noteOverlay.addEventListener('click',function(e){if(e.target===noteOverlay)closeNote();});
+renderNote();
 applyTheme();updateBgLayer();sfFolded=shortcuts.length>MAX_VIS;renderSc();applyLayout();applyTimeColors();si.focus();
 })();
 </script>
