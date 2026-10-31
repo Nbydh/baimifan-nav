@@ -393,7 +393,7 @@ if(favTasks.length)setTimeout(loadFavBatch,0);
 var fbBtn=document.getElementById('foldBtn');
 if(fbBtn){fbBtn.addEventListener('click',function(){sfFolded=!sfFolded;try{localStorage.setItem('via_sc_folded',sfFolded?'1':'0');}catch(e){}renderSc();});}
 // 书签交互: 单击跳转 / 双击编辑 / 长按拖动排序(桌面式: 图标跟手+实时让位+停留合并文件夹)
-var pressT=null,suppressClick=false,dragItem=null,dragStarting=false,clickTimer=null,pressDelay=250,dragMoved=false,dragStartX=0,dragStartY=0;
+var pressT=null,suppressClick=false,dragItem=null,dragStarting=false,clickTimer=null,pressDelay=250,dragMoved=false,dragStartX=0,dragStartY=0,pendingRenameFid=-1;
 var dragGhost=null,ghostGrabX=0,ghostGrabY=0,hoverTarget=null,hoverTimer=null,MERGE_HOLD=600;
 function clearHover(){
   if(hoverTimer){clearTimeout(hoverTimer);hoverTimer=null;}
@@ -406,6 +406,13 @@ function endDrag(){
   if(dragGhost&&dragGhost.parentNode)dragGhost.parentNode.removeChild(dragGhost);
   dragGhost=null;dragItem=null;dragStarting=false;
   scCont.querySelectorAll('.shortcut-item').forEach(function(x){x.classList.remove('dragging','drag-over','folder-drop');});
+  flushPendingRename();
+}
+// 松手后才弹出文件夹重命名(拖拽合并时先挂起, 避免拖动中打断)
+function flushPendingRename(){
+  if(pendingRenameFid<0)return;
+  var fidx=pendingRenameFid;pendingRenameFid=-1;
+  try{openFolderRename(fidx);}catch(e){}
 }
 // 按 (x,y) 找到手指/鼠标正下方的书签项; centerOnly=true 只认图标中央(用于合并判定)
 function findItem(x,y,centerOnly){
@@ -468,8 +475,8 @@ function doMerge(di,ti){
   if(dragGhost&&dragGhost.parentNode)dragGhost.parentNode.removeChild(dragGhost);
   dragGhost=null;dragItem=null;dragStarting=false;
   renderSc();
-  // 合成文件夹后自动弹出重命名
-  if(folder){var fidx=shortcuts.indexOf(folder);if(fidx>=0)setTimeout(function(){openFolderRename(fidx);},180);}
+  // 合成文件夹后记录待重命名, 松手后再弹出(见 up/endDrag), 拖动中不打断
+  if(folder){var fidx=shortcuts.indexOf(folder);if(fidx>=0)pendingRenameFid=fidx;}
 }
 function startGhost(it,x,y){
   dragItem=it;
@@ -557,13 +564,14 @@ function bindDragEvents(type){
     }
     clearHover();
     dragItem=null;dragStarting=false;dragMoved=false;
+    flushPendingRename();
   }
   document.addEventListener(rm,mv,{passive:false});
   document.addEventListener(ru,up);
 }
 // 拖动中断保护：窗口失焦或触屏被系统打断时结束拖动
-window.addEventListener('blur',function(){if(dragItem){endDrag();renderSc();}});
-document.addEventListener('touchcancel',function(){if(dragItem){endDrag();renderSc();}});
+window.addEventListener('blur',function(){if(dragItem){endDrag();renderSc();}else if(pendingRenameFid>=0){flushPendingRename();}});
+document.addEventListener('touchcancel',function(){if(dragItem){endDrag();renderSc();}else if(pendingRenameFid>=0){flushPendingRename();}});
 // 单击跳转 / 双击编辑
 function onItemClick(it){
   if(suppressClick){suppressClick=false;return;}
@@ -862,10 +870,16 @@ if(eaCancel)eaCancel.addEventListener('click',closeEngineAdd);
 if(eaOverlay)eaOverlay.addEventListener('click',function(e){if(e.target===eaOverlay)closeEngineAdd();});
 if(eaName)eaName.addEventListener('keydown',function(e){if(e.key==='Enter')eaUrl.focus();});
 if(eaUrl)eaUrl.addEventListener('keydown',function(e){if(e.key==='Enter')saveEngineAdd();});
-si.addEventListener('input',function(){scClear.classList.toggle('visible',si.value.length>0);});
-scClear.addEventListener('click',function(){si.value='';scClear.classList.remove('visible');si.focus();});
-si.addEventListener('keydown',function(e){if(e.key==='Enter'&&si.value.trim()){var eng=findEngine(curEngName)||DEFAULT_ENGINES[2];window.location.href=eng.tpl.replace('%s',encodeURIComponent(si.value.trim()));}});
-eb.addEventListener('click',function(e){e.stopPropagation();renderEngineList();ed.classList.toggle('show');});
+si.addEventListener('input',function(){scClear.classList.toggle('visible',si.value.length>0);scheduleSuggest();});
+scClear.addEventListener('click',function(){si.value='';scClear.classList.remove('visible');hideSuggest();si.focus();});
+si.addEventListener('keydown',function(e){
+if(e.key==='Escape'){hideSuggest();return;}
+if(e.key!=='Enter')return;
+var q=si.value.trim();if(!q)return;
+e.preventDefault();
+doSearchOrGo(q);
+});
+eb.addEventListener('click',function(e){e.stopPropagation();hideSuggest();renderEngineList();ed.classList.toggle('show');});
 ed.addEventListener('click',function(e){
 var del=e.target.closest('.engine-del');
 if(del){
@@ -887,6 +901,101 @@ renderEngineList();ed.classList.remove('show');
 si.focus();
 });
 document.addEventListener('click',function(e){if(!e.target.closest('#searchWrapper'))ed.classList.remove('show');});
+// 搜索联想(类似地址栏): 输入网址直接打开 / 书签 / 历史 / 百度联想
+var sugBox=document.getElementById('searchSuggest'),sugTimer=null,sugReqSeq=0;
+function escSug(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function looksLikeUrl(q){
+  if(!q||/\s/.test(q))return false;
+  if(/^https?:\/\/\S+$/i.test(q))return true;
+  if(/^(www\.)?[a-z0-9-]+(\.[a-z0-9-]+)+([\/?#][^\s]*)?$/i.test(q))return true;
+  if(/^\d{1,3}(\.\d{1,3}){3}(:\d+)?([\/?#][^\s]*)?$/.test(q))return true;
+  return false;
+}
+function getSearchHistory(){try{var a=JSON.parse(localStorage.getItem('via_search_history')||'[]');return Array.isArray(a)?a.slice(0,10).filter(function(x){return typeof x==='string'&&x;}):[];}catch(e){return[];}}
+function pushSearchHistory(q){q=String(q||'').trim();if(!q)return;var h=getSearchHistory().filter(function(x){return x!==q;});h.unshift(q);try{localStorage.setItem('via_search_history',JSON.stringify(h.slice(0,10)));}catch(e){}}
+function buildLocalSuggestions(q){
+  var low=String(q||'').toLowerCase(),out=[],seen={};
+  function add(text,kind,url){if(!text||seen[text])return;seen[text]=1;out.push({text:String(text),kind:kind,url:url||''});}
+  if(q&&looksLikeUrl(q))add(q,'open','');
+  if(q){
+    getSearchHistory().forEach(function(h){if(h.toLowerCase().indexOf(low)>=0)add(h,'history','');});
+    (Array.isArray(shortcuts)?shortcuts:[]).forEach(function(s){
+      if(!s||s.w)return;
+      var nm=String(s.name||'');
+      if(s.f){if(nm.toLowerCase().indexOf(low)>=0)add(nm,'history','');return;}
+      if(!nm)return;
+      var hit=nm.toLowerCase().indexOf(low)>=0||String(s.url||'').toLowerCase().indexOf(low)>=0;
+      if(hit)add(nm,'bookmark',s.url||'');
+    });
+  }
+  return out.slice(0,8);
+}
+function renderSuggest(items){
+  if(!sugBox)return;
+  if(!items||!items.length){sugBox.classList.remove('show');sugBox.innerHTML='';return;}
+  var icons={open:'🌐',bookmark:'⭐',history:'🕘',search:'🔍'};
+  sugBox.innerHTML=items.map(function(it){
+    return '<div class="sug-item" data-text="'+escSug(it.text)+'" data-kind="'+(it.kind||'search')+'" data-url="'+escSug(it.url||'')+'"><span class="sug-ico">'+(icons[it.kind]||'🔍')+'</span><span class="sug-text">'+escSug(it.text)+'</span></div>';
+  }).join('');
+  sugBox.classList.add('show');
+}
+function hideSuggest(){if(sugBox){sugBox.classList.remove('show');}}
+function fetchBaiduSuggest(q,done){
+  var seq=++sugReqSeq;
+  var cb='bdSug_'+seq+'_'+Math.random().toString(36).slice(2,6);
+  var sEl=document.createElement('script');
+  var to=setTimeout(function(){cleanup();if(seq===sugReqSeq)done([]);},2500);
+  function cleanup(){clearTimeout(to);try{delete window[cb];}catch(e){window[cb]=null;}try{if(sEl.parentNode)sEl.parentNode.removeChild(sEl);}catch(e){}}
+  window[cb]=function(data){cleanup();if(seq!==sugReqSeq)return;var arr=(data&&data.s)||[];done(Array.isArray(arr)?arr.map(function(x){return String(x);}):[]);};
+  sEl.onerror=function(){cleanup();if(seq===sugReqSeq)done([]);};
+  sEl.src='https://suggestion.baidu.com/su?wd='+encodeURIComponent(q)+'&cb='+cb+'&ie=utf-8';
+  document.head.appendChild(sEl);
+}
+function doSearchOrGo(q){
+  q=String(q||'').trim();if(!q)return;
+  hideSuggest();
+  if(looksLikeUrl(q)){
+    pushSearchHistory(q);
+    window.location.href=/^https?:\/\//i.test(q)?q:'https://'+q;
+    return;
+  }
+  var eng=findEngine(curEngName)||DEFAULT_ENGINES[2];
+  pushSearchHistory(q);
+  window.location.href=eng.tpl.replace('%s',encodeURIComponent(q));
+}
+function scheduleSuggest(){
+  clearTimeout(sugTimer);
+  sugTimer=setTimeout(function(){
+    var q=(si.value||'').trim();
+    if(!q){renderSuggest([]);return;}
+    var local=buildLocalSuggestions(q);
+    renderSuggest(local);
+    fetchBaiduSuggest(q,function(remote){
+      if((si.value||'').trim()!==q)return;
+      var merged=local.slice();
+      remote.forEach(function(t){
+        if(!t)return;
+        if(t.toLowerCase().indexOf(q.toLowerCase())<0)return;
+        if(!merged.some(function(m){return m.text===t;}))merged.push({text:t,kind:'search',url:''});
+      });
+      renderSuggest(merged.slice(0,8));
+    });
+  },160);
+}
+if(sugBox){
+  sugBox.addEventListener('click',function(e){
+    var it=e.target.closest('.sug-item');if(!it)return;
+    e.stopPropagation();
+    hideSuggest();
+    var kind=it.dataset.kind,text=it.dataset.text||'',url=it.dataset.url||'';
+    if(kind==='open'){pushSearchHistory(text);window.location.href=/^https?:\/\//i.test(text)?text:'https://'+text;return;}
+    if(kind==='bookmark'&&url){window.location.href=url;return;}
+    si.value=text;
+    doSearchOrGo(text);
+  });
+}
+document.addEventListener('click',function(e){if(!e.target.closest('#searchWrapper'))hideSuggest();});
+si.addEventListener('focus',function(){if(!(si.value||'').trim()){var h=getSearchHistory().slice(0,6);if(h.length)renderSuggest(h.map(function(x){return{text:x,kind:'history',url:''};}));}});
 var so=document.getElementById('settingsOverlay');
 function syncIconModeBtns(){document.querySelectorAll('#iconModeSel .mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.im===iconMode);});}
 var settingsBackGuard=false;
@@ -1164,7 +1273,6 @@ function showRename(f){
   frInput.value=f.name||'';
   frInput.style.borderColor='';
   frOverlay.classList.add('active');
-  setTimeout(function(){frInput.focus();},300);
 }
 function saveFolderName(){
   var n=frInput.value.trim();

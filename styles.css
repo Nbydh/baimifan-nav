@@ -275,3 +275,11 @@ img{-webkit-user-drag:none;}
 .modal-sheet{padding:20px 16px 28px;border-radius:18px 18px 0 0;}
 .settings-sheet{padding:16px 14px 24px;}.theme-option{min-width:50px;padding:6px;}.theme-preview{width:34px;height:34px;}
 }
+
+/* 搜索联想下拉(类似地址栏) */
+.search-suggest{position:absolute;left:0;right:0;top:100%;margin-top:6px;background:var(--card-bg);border:2px solid var(--border);border-radius:14px;box-shadow:var(--shadow-hover);overflow:hidden;z-index:12;display:none;max-height:260px;overflow-y:auto;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));}
+.search-suggest.show{display:block;animation:fadeIn 0.15s ease;}
+.sug-item{display:flex;align-items:center;gap:8px;padding:11px 14px;cursor:pointer;font-size:13px;color:var(--text);transition:background 0.12s;letter-spacing:0.3px;}
+.sug-item:hover,.sug-item:active{background:var(--accent-light);}
+.sug-ico{flex-shrink:0;width:18px;text-align:center;font-size:13px;opacity:0.85;}
+.sug-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
