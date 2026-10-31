@@ -20,7 +20,7 @@ html,body{height:100%;}
 body{
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
 background:var(--bg);color:var(--text);
--webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;
+-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none;
 transition:background 0.4s ease;position:relative;
 }
 .page-scroll{
@@ -56,6 +56,10 @@ padding:20px 20px 12px;min-height:100vh;
 .engine-add:hover{background:var(--accent-light);}
 .engine-hint{font-size:12px;color:var(--text-secondary);line-height:1.7;padding:0 4px;letter-spacing:0.3px;}
 .engine-hint code{color:var(--accent);background:var(--accent-light);padding:1px 5px;border-radius:5px;font-size:11px;}
+.engine-add{border-top:1px solid var(--border);}
+.add-tile .shortcut-icon{background:transparent;border:2px dashed var(--border);font-size:26px;color:var(--text-secondary);font-weight:400;}
+.add-tile:hover .shortcut-icon,.add-tile:active .shortcut-icon{border-color:var(--accent);color:var(--accent);}
+.add-tile .shortcut-name{color:var(--text-secondary);}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
 .shortcuts{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px;}
 .shortcut-item{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:14px 6px;border-radius:var(--card-radius);background:var(--card-bg);box-shadow:var(--shadow);transition:all 0.2s ease;text-decoration:none;color:var(--text);-webkit-tap-highlight-color:transparent;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));}
@@ -70,7 +74,8 @@ padding:20px 20px 12px;min-height:100vh;
 @keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-2px);}40%{transform:translateX(2px);}60%{transform:translateX(-2px);}80%{transform:translateX(2px);}}
 .shortcut-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;font-weight:700;flex-shrink:0;position:relative;overflow:hidden;background:var(--icon-bg,#6b7280);}
 .shortcut-icon .icon-fallback{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:24px;font-weight:700;line-height:1;text-shadow:0 1px 2px rgba(0,0,0,0.2);}
-.shortcut-icon img.fav-img{width:100%;height:100%;object-fit:cover;background:#fff;border-radius:0;display:none;padding:0;flex-shrink:0;}
+.shortcut-icon img.fav-img{width:100%;height:100%;object-fit:cover;background:#fff;border-radius:0;display:none;padding:0;flex-shrink:0;pointer-events:none;}
+img{-webkit-user-drag:none;}
 .shortcut-icon img.fav-img.loaded{display:block;}
 .shortcut-name{font-size:12px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;color:var(--text-secondary);line-height:1.2;}
 .sc-fold{display:none;align-items:center;justify-content:center;background:none;border:none;color:var(--text-secondary);opacity:0.65;cursor:pointer;padding:6px 6px 0;margin-top:0;transition:opacity 0.2s,transform 0.2s;-webkit-tap-highlight-color:transparent;}
@@ -253,7 +258,7 @@ body.edit-mode .sc-delete{display:flex;}
 <div class="clock-section"><div class="time" id="time"><span id="timeH">00</span><span class="t-colon">:</span><span id="timeM">00</span><span class="t-colon">:</span><span id="timeS">00</span></div><div class="date" id="date">2025年1月1日 星期三</div></div>
 <div class="search-wrapper" id="searchWrapper">
 <button class="search-engine-btn" id="engineBtn">必应</button>
-<input type="text" class="search-box" id="searchInput" placeholder="吃饱了，才有力气冲浪 🌊" autocomplete="off" enterkeyhint="search">
+<input type="text" class="search-box" id="searchInput" placeholder="输入搜索内容" autocomplete="off" enterkeyhint="search">
 <button class="search-clear" id="searchClear" title="清除">✕</button>
 <div class="engine-dropdown" id="engineDropdown"></div>
 </div>
@@ -262,7 +267,7 @@ body.edit-mode .sc-delete{display:flex;}
 </div>
 <div class="footer">
 <div class="footer-row"><span class="deco">◈</span><span class="line"></span><span class="brand">白米饭</span><span class="dot">·</span><span>导航</span><span class="line"></span><span class="deco">◈</span></div>
-<div class="footer-row" style="font-size:10px;opacity:0.4;letter-spacing:1px;">v5.4 · 搜索引擎版<button class="clg-btn" id="clgBtn" type="button">📜 更新内容</button></div>
+<div class="footer-row" style="font-size:10px;opacity:0.4;letter-spacing:1px;">v5.5 · 添加图标版<button class="clg-btn" id="clgBtn" type="button">📜 更新内容</button></div>
 </div>
 </div><!-- /page-scroll -->
 <button class="settings-fab" id="settingsBtn" title="设置" aria-label="设置"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M19.14 12.94a7.07 7.07 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.04 7.04 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.58.24-1.12.55-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L2.31 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.05.31-.09.63-.09.94s.04.63.09.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.31.61.22l2.39-.96c.5.39 1.04.71 1.62.94l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.58-.24 1.12-.55 1.62-.94l2.39.96c.22.09.48 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"></path></svg></button>
@@ -280,7 +285,16 @@ body.edit-mode .sc-delete{display:flex;}
 </ul>
 </div>
 <div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#8b5cf6,#e91e8c)">当前版</span><span class="clg-vname">v5.4 · 搜索引擎版</span></div>
+<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#8b5cf6,#e91e8c)">当前版</span><span class="clg-vname">v5.5 · 添加图标版</span></div>
+<ul>
+<li>➕ 书签末尾新增「添加图标」，点击即可手动添加网址</li>
+<li>📚 默认书签精简为 GitHub / 知乎</li>
+<li>🖐️ 修复长按拖动排序与浏览器默认长按菜单的冲突</li>
+<li>✍️ 搜索框提示改为「输入搜索内容」</li>
+</ul>
+</div>
+<div class="clg-ver">
+<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#607d8b,#455a64)">v5.4</span><span class="clg-vname">搜索引擎版</span></div>
 <ul>
 <li>🔍 搜索引擎：百度 / 谷歌 / 必应 / 鸭鸭走 / 搜狗 一键切换</li>
 <li>➕ 「＋ 添加搜索引擎」支持自定义引擎：名称 + 搜索地址（%s 代表搜索词）</li>
@@ -416,9 +430,9 @@ body.edit-mode .sc-delete{display:flex;}
 <p style="margin-top:4px;">白米饭导航，愿你的每次浏览都心情舒畅 🌾</p>
 </div></div>
 <div class="about-panel" id="aboutPanel_guide"><div class="about-block"><ul>
-<li><strong>搜索：</strong>输入关键词按 <span class="tag">回车</span> 搜索；点击左侧按钮切换引擎（<span class="tag">百度</span>/<span class="tag">谷歌</span>/<span class="tag">必应</span> 等），点「<span class="tag">＋ 添加搜索引擎</span>」可添加自定义引擎（地址里用 <span class="tag">%s</span> 代表搜索词）。</li>
+<li><strong>搜索：</strong>输入关键词按 <span class="tag">回车</span> 搜索；点击左侧按钮切换引擎（<span class="tag">百度</span>/<span class="tag">谷歌</span>/<span class="tag">必应</span> 等），点「<span class="tag">添加</span>」可添加自定义引擎（地址里用 <span class="tag">%s</span> 代表搜索词）。</li>
 <li><strong>打开书签：</strong>点击图标访问对应站点；图标经 <span class="tag">14源高清探测</span> 自动获取并缓存，秒开无闪烁。</li>
-<li><strong>添加书签：</strong>页面空白处 <span class="tag">双击</span>，填写名称与网址；最多显示 <span class="tag">8个</span>，超出自动折叠，点击右上角按钮展开。</li>
+<li><strong>添加书签：</strong>点末尾「<span class="tag">＋ 添加图标</span>」或页面空白处 <span class="tag">双击</span>，填写名称与网址；最多显示 <span class="tag">8个</span>，超出自动折叠，点击右上角按钮展开。</li>
 <li><strong>编辑书签：</strong>手机 <span class="tag">长按</span> / 电脑 <span class="tag">右键</span> 图标进入编辑，可修改名称与网址。</li>
 <li><strong>文件夹排序：</strong>打开文件夹后 <span class="tag">长按</span> 拖动图标即可排序；拖到底部「<span class="tag">⬇️ 移出</span>」条，可把书签移出文件夹回到主页。</li>
 <li><strong>自定义图标：</strong>编辑窗口可选 <span class="tag">自动</span>（真实favicon）/ <span class="tag">文字</span>（自定义文字+背景色+预设色板）/ <span class="tag">图片</span>（上传图片）三模式。</li>
@@ -711,7 +725,7 @@ var al=document.getElementById('authorLink');
 if(al)al.addEventListener('click',function(){window.location.href='https://www.coolapk.com/u/2570527';});
 var toastT;
 function showToast(m,ms){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show');},ms||3000);}
-var defShortcuts=[{name:"B站",icon:"B",cls:"icon-bilibili",url:"https://www.bilibili.com"},{name:"知乎",icon:"知",cls:"icon-zhihu",url:"https://www.zhihu.com"},{name:"GitHub",icon:"G",cls:"icon-github",url:"https://github.com"},{name:"必应",icon:"必",cls:"icon-bing",url:"https://www.bing.com"},{name:"抖音",icon:"抖",cls:"icon-douyin",url:"https://www.douyin.com"},{name:"微博",icon:"微",cls:"icon-weibo",url:"https://weibo.com"},{name:"淘宝",icon:"淘",cls:"icon-taobao",url:"https://www.taobao.com"},{name:"京东",icon:"东",cls:"icon-jd",url:"https://www.jd.com"}];
+var defShortcuts=[{name:"GitHub",icon:"G",cls:"icon-github",url:"https://github.com"},{name:"知乎",icon:"知",cls:"icon-zhihu",url:"https://www.zhihu.com"}];
 function loadSc(){try{var s=localStorage.getItem('via_shortcuts');if(s){var d=JSON.parse(s);if(Array.isArray(d)&&d.length>0)return d;}}catch(e){}return JSON.parse(JSON.stringify(defShortcuts));}
 var shortcuts=loadSc(),MAX_VIS=8,scCont=document.getElementById('shortcuts'),favImgCache={},favSrcCache={},foldBtnEl=document.getElementById('foldBtn');
 // favicon:PNG优先+缓存成功源+补全协议
@@ -739,7 +753,8 @@ for(var pk in favImgCache){
 try{var pi=new Image();pi.referrerPolicy='no-referrer';pi.src=favImgCache[pk];}catch(e){}
 }
 var tot=shortcuts.length,disp=(sfFolded&&tot>MAX_VIS)?shortcuts.slice(0,MAX_VIS):shortcuts;
-var html=tot?disp.map(function(s,i){
+var addTile='<div class="shortcut-item add-tile" title="添加书签" aria-label="添加书签"><div class="shortcut-icon">＋</div><span class="shortcut-name">添加图标</span></div>';
+var html=(tot?disp.map(function(s,i){
 var esc=function(v){return String(v==null?'':v).replace(/[<>&]/g,function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});};
 var ic;
 if(s&&s.f){ // 文件夹
@@ -748,7 +763,7 @@ ic='<div class="shortcut-icon folder-icon"><svg viewBox="0 0 24 24" width="26" h
 ic='<div class="shortcut-icon '+(s.cls||'icon-default')+(s.bg&&/^#[0-9a-fA-F]{3,8}$/.test(s.bg)?'" style="background:'+s.bg+'"':'')+'"><span class="icon-fallback">'+esc(s.icon)+'</span></div>';
 }
 return'<div class="shortcut-item'+(s&&s.f?' folder-item':'')+'" data-index="'+i+'"><button class="sc-delete" type="button" aria-label="删除">✕</button>'+ic+'<span class="shortcut-name">'+esc(s.name)+'</span></div>';
-}).join(''):'<div class="sc-empty">双击空白处，添加第一个书签 ✨</div>';
+}).join(''):'<div class="sc-empty">双击空白处，添加第一个书签 ✨</div>')+addTile;
 scCont.innerHTML=html;
 if(foldBtnEl){if(tot>MAX_VIS){foldBtnEl.classList.add('show');foldBtnEl.classList.toggle('expanded',!sfFolded);foldBtnEl.title=sfFolded?'展开全部 ('+(tot-MAX_VIS)+')':'收起';}else{foldBtnEl.classList.remove('show');}}
 //加载favicon:并发3+缓存+超时切源
@@ -860,7 +875,7 @@ function findItem(x,y,centerOnly){
   var els=Array.prototype.slice.call(scCont.querySelectorAll('.shortcut-item'));
   var best=null,bd=1e9;
   for(var k=0;k<els.length;k++){
-    if(els[k]===dragItem)continue;
+    if(els[k]===dragItem||els[k].classList.contains('add-tile'))continue;
     var r=els[k].getBoundingClientRect();
     if(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom){
       if(centerOnly){
@@ -971,9 +986,9 @@ function bindDragEvents(type){
       var r=di2.getBoundingClientRect();
       if(g){g.style.transition='left .18s ease,top .18s ease,transform .18s ease';g.style.left=r.left+'px';g.style.top=r.top+'px';g.style.transform='scale(1)';}
       // 按当前 DOM 顺序回写可见区数组；折叠隐藏的书签原样保留
-      var visCount=scCont.querySelectorAll('.shortcut-item').length;
+      var visCount=scCont.querySelectorAll('.shortcut-item:not(.add-tile)').length;
       var newArr=[];
-      scCont.querySelectorAll('.shortcut-item').forEach(function(el){var i=parseInt(el.dataset.index);newArr.push(shortcuts[i]);});
+      scCont.querySelectorAll('.shortcut-item').forEach(function(el){if(el.classList.contains('add-tile'))return;var i=parseInt(el.dataset.index);newArr.push(shortcuts[i]);});
       shortcuts=newArr.concat(shortcuts.slice(visCount));
       try{localStorage.setItem('via_shortcuts',JSON.stringify(shortcuts));showToast('排序已保存');}catch(e){}
       suppressClick=true;
@@ -992,6 +1007,7 @@ document.addEventListener('touchcancel',function(){if(dragItem){endDrag();render
 // 单击跳转 / 双击编辑
 function onItemClick(it){
   if(suppressClick){suppressClick=false;return;}
+  if(it.classList.contains('add-tile')){openModal(-1);return;}
   var idx=parseInt(it.dataset.index);
   var sc=shortcuts[idx];
   if(sc&&sc.f){
@@ -1032,6 +1048,7 @@ scCont.addEventListener('click',function(e){
 });
 scCont.addEventListener('touchstart',function(e){
   var it=e.target.closest('.shortcut-item');if(!it)return;
+  if(it.classList.contains('add-tile'))return;
   if(e.target.closest('.sc-delete'))return;
   if(dragItem)endDrag();
   var t=e.touches[0],sx=t.clientX,sy=t.clientY;
@@ -1067,11 +1084,18 @@ scCont.addEventListener('contextmenu',function(e){
   var idx=parseInt(it.dataset.index);
   if(shortcuts[idx]&&shortcuts[idx].f){openFolderRename(idx);}else{openModal(idx);}
 });
+// 触屏长按统一阻止浏览器默认菜单(复制/选择等)，避免与长按拖动排序冲突；输入框保留
+document.addEventListener('contextmenu',function(e){
+  if(e.button===2)return;
+  if(e.target.closest('input,textarea'))return;
+  e.preventDefault();
+});
 // 桌面: 长按拖动排序 + 双击编辑
 var mMove=null,mUp=null;
 scCont.addEventListener('mousedown',function(e){
   if(e.button!==0)return;
   var it=e.target.closest('.shortcut-item');if(!it)return;
+  if(it.classList.contains('add-tile'))return;
   if(e.target.closest('.sc-delete'))return;
   if(dragItem)endDrag();
   var sx=e.clientX,sy=e.clientY;
@@ -1250,7 +1274,7 @@ var all=allEngines();
 ed.innerHTML=all.map(function(en,i){
 var isC=i>=DEFAULT_ENGINES.length,ci=i-DEFAULT_ENGINES.length;
 return '<div class="engine-option'+(en.name===curEngName?' active':'')+'" data-name="'+escEng(en.name)+'">'+escEng(en.name)+(isC?'<button type="button" class="engine-del" data-del="'+ci+'" title="删除该引擎">✕</button>':'')+'</div>';
-}).join('')+'<div class="engine-option engine-add" id="engineAddItem">＋ 添加搜索引擎</div>';
+}).join('')+'<div class="engine-option engine-add" id="engineAddItem">添加</div>';
 eb.textContent=curEngName;
 }
 renderEngineList();
