@@ -311,98 +311,11 @@ img{-webkit-user-drag:none;}
 </div>
 <div class="footer">
 <div class="footer-row"><span class="deco">◈</span><span class="line"></span><span class="brand">白米饭</span><span class="dot">·</span><span>导航</span><span class="line"></span><span class="deco">◈</span></div>
-<div class="footer-row" style="font-size:10px;opacity:0.4;letter-spacing:1px;">v5.9 · 键盘适配版<button class="clg-btn" id="clgBtn" type="button">📜 更新内容</button></div>
 </div>
 </div><!-- /page-scroll -->
 <button class="settings-fab" id="settingsBtn" title="设置" aria-label="设置"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M19.14 12.94a7.07 7.07 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.04 7.04 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.58.24-1.12.55-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L2.31 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.05.31-.09.63-.09.94s.04.63.09.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.31.61.22l2.39-.96c.5.39 1.04.71 1.62.94l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.58-.24 1.12-.55 1.62-.94l2.39.96c.22.09.48 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"></path></svg></button>
 <div class="toast" id="toast"></div>
-<div class="clg-overlay" id="clgOverlay"></div>
-<div class="clg-panel" id="clgPanel" role="dialog" aria-label="更新内容">
-<h4>📜 更新日志<button class="clg-close" id="clgClose" type="button" aria-label="关闭">✕</button></h4>
-<div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#607d8b,#455a64)">初始版</span><span class="clg-vname">白米饭导航</span></div>
-<ul>
-<li>极简起始页：搜索 / 时间 / 书签</li>
-<li>🔍 多引擎搜索：必应 / 谷歌 / 鸭鸭走 / 搜狗</li>
-</ul>
-</div>
-<div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#8b5cf6,#e91e8c)">当前版</span><span class="clg-vname">v5.9 · 键盘适配版</span></div>
-<ul>
-<li>⌨️ 修复输入法弹出遮挡问题：编辑时切换为全屏编辑界面，跟随软键盘自动缩放</li>
-<li>📝 全屏编辑仿系统记事本：顶部「取消 / 名称 / 完成」，中间输入区，底部格式工具栏</li>
-<li>✕ 取消可放弃本次修改，空的新笔记取消后自动丢弃</li>
-<li>🖼️ 修复记事本卡片导致书签图标不加载的问题</li>
-</ul>
-</div>
-<div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#607d8b,#455a64)">v5.8</span><span class="clg-vname">记事本大改造</span></div>
-<ul>
-<li>📝 记事本升级为 2×2 大卡片小组件，和书签图标一样可拖动排序</li>
-<li>🖥️ 点开下半屏面板：左侧笔记列表 + 「＋ 新建」，右侧直接显示内容</li>
-<li>✏️ 笔记默认显示渲染效果，点「✏️ 编辑」直接改内容、点「✓ 完成」保存，无需关掉重开</li>
-<li>⭐ 去掉左下角编辑按钮：长按图标不动即可编辑/删除，长按拖动仍是排序</li>
-<li>📁 长按文件夹可重命名或删除（内容保留到主页）</li>
-</ul>
-</div>
-<div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#607d8b,#455a64)">v5.7</span><span class="clg-vname">记事本加强版</span></div>
-<ul>
-<li>📝 记事本升级为可拖动小组件，和书签图标一样拖动排序</li>
-<li>🗂 支持多个记事本：编辑器内「＋ 新建记事本」或设置里新建</li>
-<li>⌨️ 编辑工具栏：点按 H1/H2/H3 选标题级别、加粗、列表、引用、代码、链接，不用手打符号</li>
-<li>👁 一键预览 Markdown 渲染效果</li>
-</ul>
-</div>
-<div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#607d8b,#455a64)">v5.6</span><span class="clg-vname">记事本版</span></div>
-<ul>
-<li>📝 新增「记事本」小组件：支持 Markdown 编辑与渲染</li>
-<li>标题 / 加粗 / 斜体 / 列表 / 引用 / 代码块 / 链接均可使用</li>
-<li>内容自动保存在浏览器本地</li>
-</ul>
-</div>
-<div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#607d8b,#455a64)">v5.5</span><span class="clg-vname">添加图标版</span></div>
-<ul>
-<li>➕ 书签末尾新增「添加图标」，点击即可手动添加网址</li>
-<li>📚 默认书签精简为 GitHub / 知乎</li>
-<li>🖐️ 修复长按拖动排序与浏览器默认长按菜单的冲突</li>
-<li>✍️ 搜索框提示改为「输入搜索内容」</li>
-</ul>
-</div>
-<div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#607d8b,#455a64)">v5.4</span><span class="clg-vname">搜索引擎版</span></div>
-<ul>
-<li>🔍 搜索引擎：百度 / 谷歌 / 必应 / 鸭鸭走 / 搜狗 一键切换</li>
-<li>➕ 「＋ 添加搜索引擎」支持自定义引擎：名称 + 搜索地址（%s 代表搜索词）</li>
-<li>✕ 自定义引擎可删除，设置自动保存在浏览器本地</li>
-</ul>
-</div>
-<div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#607d8b,#455a64)">v5.3</span><span class="clg-vname">文件夹排序版</span></div>
-<ul>
-<li>📂 文件夹内长按拖动排序，实时让位，手机 / 电脑均可使用</li>
-<li>⬇️ 文件夹底部「移出」条：把书签拖上去即可移出文件夹、回到主页</li>
-<li>📱 优化手机浏览器（Via）下的拖动体验与防误触</li>
-</ul>
-</div>
-<div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#607d8b,#455a64)">v5.2</span><span class="clg-vname">自定义图标版</span></div>
-<ul>
-<li>🎨 5套主题：简约白 / 天空蓝 / 薄荷绿 / 日落暖橙 / 深海蓝紫</li>
-<li>🌗 明暗模式：跟随系统 / 浅色 / 深色 一键切换</li>
-<li>🖼️ 自定义背景：上传图片或 URL，一键清除</li>
-<li>✏️ 自定义文字颜色：主/次独立取色 + 预设色板 + 点击默认恢复</li>
-<li>🎛️ 布局调节：页面整体位置上下微调</li>
-<li>📚 书签管理：JSON 导入导出、一键恢复默认</li>
-<li>🔤 自定义书签图标：自动(favicon) / 文字 / 图片 三模式</li>
-<li>🔄 全局图标/文字切换：设置内一键切换书签显示</li>
-<li>🖼️ 高清 favicon：14源智能探测 + 缓存 + 尺寸体检</li>
-<li>📦 书签折叠：超出 8 个自动收起展开</li>
-</ul>
-</div>
-</div>
+
 <div class="modal-overlay" id="modalOverlay"><div class="modal-sheet" id="modalSheet">
 <div class="modal-handle"></div><div class="modal-title" id="modalTitle">📝 编辑书签</div>
 <div class="modal-field"><label class="modal-label">名称</label><input class="modal-input" id="modalName" type="text" placeholder="网站名称" autocomplete="off"></div>
@@ -487,49 +400,23 @@ img{-webkit-user-drag:none;}
 </div>
 <button class="bg-btn" id="timeColorResetBtn">↺ 恢复默认时间颜色</button>
 </div></div>
-<div class="settings-section"><div class="about-tabs">
-<button class="about-tab" data-tab="intro">🌊 关于白米饭</button>
-<button class="about-tab" data-tab="guide">📖 使用方法</button>
-</div>
-<div class="about-panel" id="aboutPanel_intro"><div class="about-block">
-<p><span class="tag">白米饭导航</span> 是一个轻量、极简的浏览器起始页。无广告、无弹窗——愿每次打开浏览器，都能以最快的速度、最干净的方式抵达想去的地方。</p>
-<h3><span class="about-icon">✨</span> 设计理念</h3><ul>
-<li><strong>极简纯净：</strong>无广告、无弹窗、无多余打扰，界面干净克制。</li>
-<li><strong>轻量零依赖：</strong>单文件实现，不依赖任何框架，打开即用。</li>
-<li><strong>隐私安全：</strong>所有书签与设置仅保存在浏览器本地，绝不上传服务器。</li>
-<li><strong>自由定制：</strong>主题、背景、文字颜色、布局位置均可随心调整。</li>
-</ul>
-<h3><span class="about-icon">🎯</span> 特色功能</h3><ul>
-<li><span class="tag">5套主题</span>：3纯色 + 2渐变，自动适配明暗。</li>
-<li><span class="tag">明暗模式</span>：跟随系统 / 浅色 / 深色 一键切换。</li>
-<li><span class="tag">自定义背景</span>：上传图片或输入URL，随时清除。</li>
-<li><span class="tag">自定义文字颜色</span>：主文字、次要文字独立取色，实时预览。</li>
-<li><span class="tag">布局调节</span>：页面整体上下微调，底部功能固定不动。</li>
-<li><span class="tag">书签管理</span>：支持 JSON 导入导出备份、一键恢复默认。</li>
-<li><span class="tag">多引擎搜索</span>：百度 / 谷歌 / 必应 / 鸭鸭走 / 搜狗 一键切换，支持添加自定义引擎。</li>
-<li><span class="tag">记事本</span>：2×2 大卡片小组件，支持多条笔记、点按标题格式，默认直接显示排版。</li>
-</ul>
-<p style="margin-top:4px;">白米饭导航，愿你的每次浏览都心情舒畅 🌾</p>
-</div></div>
-<div class="about-panel" id="aboutPanel_guide"><div class="about-block"><ul>
+<div class="settings-section"><div class="settings-section-title">📖 使用方法</div><div class="about-block"><ul>
 <li><strong>搜索：</strong>输入关键词按 <span class="tag">回车</span> 搜索；点击左侧按钮切换引擎（<span class="tag">百度</span>/<span class="tag">谷歌</span>/<span class="tag">必应</span> 等），点「<span class="tag">添加</span>」可添加自定义引擎（地址里用 <span class="tag">%s</span> 代表搜索词）。</li>
 <li><strong>打开书签：</strong>点击图标访问对应站点；图标经 <span class="tag">14源高清探测</span> 自动获取并缓存，秒开无闪烁。</li>
-<li><strong>添加书签：</strong>点末尾「<span class="tag">＋ 添加图标</span>」或页面空白处 <span class="tag">双击</span>，填写名称与网址；最多显示 <span class="tag">8个</span>，超出自动折叠，点击右上角按钮展开。</li>
-<li><strong>编辑书签：</strong><span class="tag">长按</span>图标（不拖动即松开）进入编辑，可修改名称、网址与图标；<span class="tag">长按拖动</span>则是排序。</li>
-<li><strong>文件夹排序：</strong>打开文件夹后 <span class="tag">长按</span> 拖动图标即可排序；拖到底部「<span class="tag">⬇️ 移出</span>」条，可把书签移出文件夹回到主页。</li>
+<li><strong>添加书签：</strong>点末尾「<span class="tag">＋</span>」或页面空白处 <span class="tag">双击</span>，填写名称与网址；最多显示 <span class="tag">8个</span>，超出自动折叠，点击右上角按钮展开。</li>
+<li><strong>编辑 / 删除书签：</strong><span class="tag">长按</span>图标（不拖动即松开）进入编辑，可修改名称、网址与图标，点「<span class="tag">🗑 删除此书签</span>」可删除（再点「确认」）；<span class="tag">长按拖动</span>则是排序。</li>
+<li><strong>文件夹：</strong>书签拖到图标中央停留可合并成文件夹；<span class="tag">长按</span>文件夹可重命名或删除（内容保留到主页）；打开文件夹可拖动排序，点 <span class="tag">✕</span> 或拖到底部移出。</li>
 <li><strong>自定义图标：</strong>编辑窗口可选 <span class="tag">自动</span>（真实favicon）/ <span class="tag">文字</span>（自定义文字+背景色+预设色板）/ <span class="tag">图片</span>（上传图片）三模式。</li>
 <li><strong>全局图标切换：</strong>设置 → <span class="tag">书签图标</span> 一键切换全部书签为图标或文字显示，零网络请求秒开。</li>
-<li><strong>删除书签：</strong>编辑窗口中点击「<span class="tag">🗑 删除此书签</span>」并再次确认，防止误删。</li>
 <li><strong>主题与模式：</strong><span class="tag">5套主题</span>（3纯色+2渐变），支持 <span class="tag">跟随系统</span>/<span class="tag">浅色</span>/<span class="tag">深色</span>。</li>
 <li><strong>自定义背景：</strong>上传图片或图片链接设置背景，可一键清除。</li>
 <li><strong>自定义文字颜色：</strong>主/次文字独立 <span class="tag">HSV取色器</span> 精细调色 + <span class="tag">预设色板</span> 快捷选色，点「默认」恢复该行。</li>
+<li><strong>时间颜色：</strong>时 / 分 / 秒分别独立取色，可一键恢复默认。</li>
 <li><strong>布局调节：</strong>「页面整体」滑块微调内容位置，底部功能区固定。</li>
 <li><strong>书签备份：</strong>书签可导出 JSON / 导入恢复 / 一键恢复默认。</li>
-<li><strong>更新内容：</strong>页脚「<span class="tag">📜 更新内容</span>」查看版本更新日志。</li>
-<li><strong>记事本：</strong>书签网格里的「📝」大卡片，长按可和图标一样拖动排序；点开面板左侧「＋ 新建」管理多条笔记，右侧直接显示内容；点「✏️ 编辑」进入全屏编辑（自动跟随输入法键盘缩放，不再被遮挡），工具栏点按 H1/H2/H3/加粗/列表等格式，点「完成」保存、「取消」放弃。</li>
-<li><strong>数据隐私：</strong>所有书签与设置仅保存在本地，不上传任何服务器。</li>
+<li><strong>记事本(note)：</strong>网格里的「notes」大卡片，长按可拖动排序；点开打开面板：左侧「＋ 新建」管理多条笔记，右侧直接显示内容；点「✏️ 编辑」进入全屏编辑（自动适配输入法键盘），工具栏点按 H1/H2/H3/加粗/列表等格式，点「完成」保存、「取消」放弃。</li>
+<li><strong>数据隐私：</strong>所有书签与笔记仅保存在本地，不上传任何服务器。</li>
 </ul></div></div>
-</div>
 <div class="author-info" id="authorLink" style="cursor:pointer;"><span class="author-icon">👨‍💻</span><span>作者：<strong>@拥你在我怀抱</strong></span><span class="author-tip">←快去投币哦</span><span class="author-extra">快看快看，又让我发现一个不投币的家伙ꉂ(ˊᗜˋ*)</span></div>
 </div></div>
 <div class="modal-overlay" id="folderViewOverlay"><div class="modal-sheet" id="folderViewSheet">
@@ -554,7 +441,7 @@ img{-webkit-user-drag:none;}
 </div></div>
 <div class="modal-overlay" id="notesOverlay"><div class="modal-sheet notes-sheet">
 <div class="modal-handle"></div>
-<div class="notes-head"><span class="notes-title">📝 记事本</span><button class="notes-close" id="notesClose" type="button">✕</button></div>
+<div class="notes-head"><span class="notes-title">notes</span><button class="notes-close" id="notesClose" type="button">✕</button></div>
 <div class="notes-body">
 <aside class="notes-side">
 <button class="notes-new" id="notesNewBtn" type="button">＋ 新建</button>
@@ -875,13 +762,13 @@ for(var pk in favImgCache){
 try{var pi=new Image();pi.referrerPolicy='no-referrer';pi.src=favImgCache[pk];}catch(e){}
 }
 var tot=shortcuts.length,disp=(sfFolded&&tot>MAX_VIS)?shortcuts.slice(0,MAX_VIS):shortcuts;
-var addTile='<div class="shortcut-item add-tile" title="添加书签" aria-label="添加书签"><div class="shortcut-icon">＋</div><span class="shortcut-name">添加图标</span></div>';
+var addTile='<div class="shortcut-item add-tile" title="添加书签" aria-label="添加书签"><div class="shortcut-icon">＋</div></div>';
 var html=(tot?disp.map(function(s,i){
 var esc=function(v){return String(v==null?'':v).replace(/[<>&]/g,function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});};
 var ic;
 if(s&&s.w){ // 记事本大卡片(2x2)
   var snip=noteSnippet();
-  return'<div class="shortcut-item widget-item" data-index="'+i+'"><div class="widget-head"><span class="widget-icon">📝</span><span class="widget-name">'+esc(s.name)+'</span><span class="widget-count">'+notebooks.length+' 条</span></div><div class="widget-preview">'+(snip?esc(snip):'暂无笔记，点开写吧')+'</div></div>';
+  return'<div class="shortcut-item widget-item" data-index="'+i+'"><div class="widget-head"><span class="widget-name">notes</span><span class="widget-count">'+notebooks.length+' 条</span></div><div class="widget-preview">'+(snip?esc(snip):'暂无笔记，点开写吧')+'</div></div>';
 }
 if(s&&s.f){ // 文件夹
 ic='<div class="shortcut-icon folder-icon"><svg viewBox="0 0 24 24" width="26" height="26" fill="#fff"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg><span class="folder-count">'+(s.items?s.items.length:0)+'</span></div>';
@@ -1365,7 +1252,7 @@ syncPalettes();
 mo.classList.add('active');setTimeout(function(){mn.focus();},300);}
 function closeModal(){mo.classList.remove('active');editIdx=-1;isNew=false;resetDel();}
 function resetDel(){md.textContent='🗑 删除此书签';md.style.background='var(--danger-light)';md.style.color='var(--danger)';md.onclick=cfmDel;}
-function cfmDel(){if(isNew)return;md.textContent='⚠️ 再次点击确认删除';md.style.background='var(--danger)';md.style.color='#fff';md.onclick=function(){shortcuts.splice(editIdx,1);if(sfFolded&&shortcuts.length<=MAX_VIS){sfFolded=false;try{localStorage.setItem('via_sc_folded','0');}catch(e){}}saveSc();renderSc();closeModal();};setTimeout(resetDel,3000);}
+function cfmDel(){if(isNew)return;md.textContent='确认';md.style.background='var(--danger)';md.style.color='#fff';md.onclick=function(){shortcuts.splice(editIdx,1);if(sfFolded&&shortcuts.length<=MAX_VIS){sfFolded=false;try{localStorage.setItem('via_sc_folded','0');}catch(e){}}saveSc();renderSc();closeModal();};setTimeout(resetDel,3000);}
 md.onclick=cfmDel;
 ms.addEventListener('click',function(){
 var n=mn.value.trim(),u=mu.value.trim();
@@ -1479,26 +1366,7 @@ document.getElementById('settingsBtn').addEventListener('click',function(){so.cl
 so.addEventListener('click',function(e){if(e.target===so)so.classList.remove('active');});
 document.querySelectorAll('#modeSelector .mode-btn').forEach(function(b){b.addEventListener('click',function(){curMode=b.dataset.mode;localStorage.setItem('via_mode',curMode);applyTheme();updateBgLayer();showToast('模式已切换');});});
 document.querySelectorAll('#iconModeSel .mode-btn').forEach(function(b){b.addEventListener('click',function(){iconMode=b.dataset.im;try{localStorage.setItem('via_icon_mode',iconMode);}catch(e){}syncIconModeBtns();renderSc();showToast(iconMode==='text'?'已切换为文字图标模式':'已切换为图标模式');});});
-// 关于/使用:展开互斥
-var aboutTabs=document.querySelectorAll('.about-tab');
-aboutTabs.forEach(function(t){
-t.addEventListener('click',function(){
-var panel=document.getElementById('aboutPanel_'+t.dataset.tab);
-var isOpen=panel.classList.contains('show');
-aboutTabs.forEach(function(x){x.classList.remove('active');});
-document.querySelectorAll('.about-panel').forEach(function(p){p.classList.remove('show');});
-if(!isOpen){panel.classList.add('show');t.classList.add('active');}
-});
-});
-// 更新内容弹窗
-var clgBtn=document.getElementById('clgBtn'),clgPanel=document.getElementById('clgPanel'),clgOverlay=document.getElementById('clgOverlay');
-function openClg(){if(clgOverlay)clgOverlay.classList.add('show');if(clgPanel)clgPanel.classList.add('show');}
-function closeClg(){if(clgOverlay)clgOverlay.classList.remove('show');if(clgPanel)clgPanel.classList.remove('show');}
-if(clgBtn)clgBtn.addEventListener('click',openClg);
-if(clgOverlay)clgOverlay.addEventListener('click',closeClg);
-if(clgPanel)clgPanel.addEventListener('click',function(e){e.stopPropagation();});
-var clgClose=document.getElementById('clgClose');
-if(clgClose)clgClose.addEventListener('click',closeClg);
+// (关于页签已移除: 设置内仅保留「使用方法」)
 var bf=document.getElementById('bgFileInput');
 document.getElementById('bgUploadBtn').addEventListener('click',function(){bf.click();});
 bf.addEventListener('change',function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){var img=new Image();img.onload=function(){var c=document.createElement('canvas'),w=img.width,h=img.height,mw=800;if(w>mw){h=h*mw/w;w=mw;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);var du=c.toDataURL('image/jpeg',0.7);customBg=du;try{localStorage.setItem('via_bg_image',customBg);updateBgLayer();showToast('背景已设置');}catch(ex){showToast('图片过大，请用URL方式');}};img.src=e.target.result;};r.readAsDataURL(f);this.value='';});
@@ -1789,7 +1657,7 @@ function deleteFolder(f){
 var folderDelBtn=document.getElementById('folderDelBtn');
 if(folderDelBtn)folderDelBtn.addEventListener('click',function(){
   if(!renameTarget)return;
-  if(!this.dataset.arm){this.dataset.arm='1';this.textContent='⚠️ 再点一次删除';setTimeout(function(){if(folderDelBtn){delete folderDelBtn.dataset.arm;folderDelBtn.textContent='🗑 删除文件夹';}},2500);return;}
+  if(!this.dataset.arm){this.dataset.arm='1';this.textContent='确认';setTimeout(function(){if(folderDelBtn){delete folderDelBtn.dataset.arm;folderDelBtn.textContent='🗑 删除文件夹';}},2500);return;}
   delete this.dataset.arm;this.textContent='🗑 删除文件夹';
   deleteFolder(renameTarget);renameTarget=null;
 });
@@ -1962,7 +1830,7 @@ function newNoteInPanel(){
 function deleteNoteCurrent(){
   var n=curNote();if(!n)return;
   if(!notesDelBtn)return;
-  if(!notesDelBtn.dataset.arm){notesDelBtn.dataset.arm='1';notesDelBtn.textContent='⚠️ 再点一次删除';setTimeout(function(){if(notesDelBtn){delete notesDelBtn.dataset.arm;notesDelBtn.textContent='🗑 删除';}},2500);return;}
+  if(!notesDelBtn.dataset.arm){notesDelBtn.dataset.arm='1';notesDelBtn.textContent='确认';setTimeout(function(){if(notesDelBtn){delete notesDelBtn.dataset.arm;notesDelBtn.textContent='🗑 删除';}},2500);return;}
   delete notesDelBtn.dataset.arm;notesDelBtn.textContent='🗑 删除';
   for(var i=0;i<notebooks.length;i++){if(notebooks[i].id===curNoteId){notebooks.splice(i,1);break;}}
   notesSave();
