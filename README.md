@@ -2,9 +2,11 @@
 
 当前版本：**v5.10 · 界面精简版**
 
-本文件夹内只有两个文件：
+本文件夹是三个页面文件 + 本说明：
 
-- `index.html` —— 完整页面（单文件、零依赖，无任何外部资源）
+- `index.html` —— 页面结构（HTML）
+- `styles.css` —— 页面样式（CSS）
+- `app.js` —— 页面功能（JavaScript）
 - `README.md` —— 本说明（部署指南 + 更新日志）
 
 目标：把起始页托管成一个长期有效的网址，手机 Via 浏览器直接打开，无需每次传文件。
@@ -30,7 +32,7 @@
 1. 注册/登录 GitHub：<https://github.com>
 2. 点右上角「+」→「New repository」
 3. 仓库名随意（如 `baimifan-nav`），选 **Public**，点「Create repository」
-4. 进入仓库 →「Add file」→「Upload files」→ 把本文件夹里的 `index.html` 拖进去 → 点「Commit changes」
+4. 进入仓库 →「Add file」→「Upload files」→ 把本文件夹里的 `index.html`、`styles.css`、`app.js` 三个文件一起拖进去 → 点「Commit changes」
 5. 仓库 **Settings → Pages**：
    - Source 选「Deploy from a branch」
    - Branch 选 `main`，目录选 `/ (root)`
@@ -38,7 +40,7 @@
 6. 等 1~2 分钟，访问 `https://你的用户名.github.io/仓库名/` 即可（如 `https://zhangsan.github.io/baimifan-nav/`）
 7. 手机 Via：设置 → 起始页 → 自定义网址，填入上述地址
 
-**以后更新页面：** 在仓库里重新上传覆盖 `index.html`，1 分钟后自动生效。
+**以后更新页面：** 在仓库里重新上传覆盖 `index.html` / `styles.css` / `app.js`（或直接 git 推送），1 分钟后自动生效。
 
 ---
 
@@ -51,7 +53,7 @@
 1. 在腾讯云买一个便宜域名（`.top` / `.xyz` 首年约 ¥10~30）
 2. 腾讯云控制台 → EdgeOne Pages → 创建项目 → 选「直接上传」
 3. **加速区域选「全球可用区（不含中国大陆）」**（关键！选含中国大陆就必须备案）
-4. 拖入 `index.html` → 开始部署
+4. 拖入 `index.html`、`styles.css`、`app.js`（可整个文件夹）→ 开始部署
 5. 项目设置 → 域名管理 → 添加自定义域名 → 按提示在域名 DNS 里加 CNAME 记录
 6. 成功后用你的域名访问，长期有效
 
