@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#f5f5f5" id="themeMeta">
 <title>白米饭导航</title>
 <style>
@@ -96,14 +96,19 @@ padding:20px 20px 12px;min-height:100vh;
 .notes-view ul,.notes-view ol{margin:4px 0;padding-left:20px;}
 .notes-view li{margin:2px 0;}
 .notes-view hr{border:none;border-top:1px solid var(--border);margin:8px 0;}
-.notes-input{flex:1;width:100%;resize:none;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);padding:10px;font-size:13px;line-height:1.7;outline:none;font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.3px;}
-.notes-input:focus{border-color:var(--accent);}
-.notes-name{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-size:13px;outline:none;transition:border .15s;flex-shrink:0;}
-.notes-name:focus{border-color:var(--accent);}
-.note-tools{display:flex;flex-wrap:wrap;gap:5px;flex-shrink:0;}
-.note-tools button{min-width:34px;height:34px;padding:0 9px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
-.note-tools button:active{transform:scale(.94);}
-.note-tools button:hover{border-color:var(--accent);color:var(--accent);}
+/* 全屏编辑器(跟随键盘, 输入法弹出不遮挡) */
+.note-editor-overlay{position:fixed;left:0;top:0;right:0;bottom:0;z-index:150;background:var(--bg);display:none;flex-direction:column;height:100vh;height:100dvh;height:var(--app-h,100dvh);}
+.note-editor-overlay.active{display:flex;}
+.ne-head{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 10px 8px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.ne-cancel,.ne-done{background:none;border:none;color:var(--accent);font-size:15px;padding:6px 10px;border-radius:8px;cursor:pointer;font-weight:500;letter-spacing:.5px;}
+.ne-done{font-weight:700;}
+.ne-name{flex:1;border:none;background:transparent;color:var(--text);font-size:15px;font-weight:600;text-align:center;outline:none;min-width:0;letter-spacing:.5px;}
+.ne-body{flex:1;display:flex;flex-direction:column;padding:10px 14px 0;min-height:0;}
+.ne-input{flex:1;width:100%;resize:none;border:none;background:transparent;color:var(--text);font-size:15px;line-height:1.75;outline:none;letter-spacing:.3px;}
+.ne-tools{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px calc(8px + env(safe-area-inset-bottom));border-top:1px solid var(--border);flex-shrink:0;background:var(--bg);}
+.ne-tools button{min-width:36px;height:36px;padding:0 10px;border-radius:10px;border:1px solid var(--border);background:var(--card-bg);color:var(--text);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.ne-tools button:active{transform:scale(.94);}
+.ne-tools button:hover{border-color:var(--accent);color:var(--accent);}
 .notes-foot{display:flex;gap:8px;align-items:center;flex-shrink:0;}
 .notes-foot button{padding:10px 14px;border-radius:12px;border:none;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.5px;transition:all .15s;}
 .notes-foot .nf-edit{background:var(--accent);color:#fff;flex:1;}
@@ -306,7 +311,7 @@ img{-webkit-user-drag:none;}
 </div>
 <div class="footer">
 <div class="footer-row"><span class="deco">◈</span><span class="line"></span><span class="brand">白米饭</span><span class="dot">·</span><span>导航</span><span class="line"></span><span class="deco">◈</span></div>
-<div class="footer-row" style="font-size:10px;opacity:0.4;letter-spacing:1px;">v5.8 · 记事本大改造<button class="clg-btn" id="clgBtn" type="button">📜 更新内容</button></div>
+<div class="footer-row" style="font-size:10px;opacity:0.4;letter-spacing:1px;">v5.9 · 键盘适配版<button class="clg-btn" id="clgBtn" type="button">📜 更新内容</button></div>
 </div>
 </div><!-- /page-scroll -->
 <button class="settings-fab" id="settingsBtn" title="设置" aria-label="设置"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M19.14 12.94a7.07 7.07 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.04 7.04 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.58.24-1.12.55-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L2.31 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.05.31-.09.63-.09.94s.04.63.09.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.31.61.22l2.39-.96c.5.39 1.04.71 1.62.94l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.58-.24 1.12-.55 1.62-.94l2.39.96c.22.09.48 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"></path></svg></button>
@@ -322,7 +327,16 @@ img{-webkit-user-drag:none;}
 </ul>
 </div>
 <div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#8b5cf6,#e91e8c)">当前版</span><span class="clg-vname">v5.8 · 记事本大改造</span></div>
+<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#8b5cf6,#e91e8c)">当前版</span><span class="clg-vname">v5.9 · 键盘适配版</span></div>
+<ul>
+<li>⌨️ 修复输入法弹出遮挡问题：编辑时切换为全屏编辑界面，跟随软键盘自动缩放</li>
+<li>📝 全屏编辑仿系统记事本：顶部「取消 / 名称 / 完成」，中间输入区，底部格式工具栏</li>
+<li>✕ 取消可放弃本次修改，空的新笔记取消后自动丢弃</li>
+<li>🖼️ 修复记事本卡片导致书签图标不加载的问题</li>
+</ul>
+</div>
+<div class="clg-ver">
+<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#607d8b,#455a64)">v5.8</span><span class="clg-vname">记事本大改造</span></div>
 <ul>
 <li>📝 记事本升级为 2×2 大卡片小组件，和书签图标一样可拖动排序</li>
 <li>🖥️ 点开下半屏面板：左侧笔记列表 + 「＋ 新建」，右侧直接显示内容</li>
@@ -512,7 +526,7 @@ img{-webkit-user-drag:none;}
 <li><strong>布局调节：</strong>「页面整体」滑块微调内容位置，底部功能区固定。</li>
 <li><strong>书签备份：</strong>书签可导出 JSON / 导入恢复 / 一键恢复默认。</li>
 <li><strong>更新内容：</strong>页脚「<span class="tag">📜 更新内容</span>」查看版本更新日志。</li>
-<li><strong>记事本：</strong>书签网格里的「📝」大卡片，长按可和图标一样拖动排序；点击打开下半屏面板：左侧「＋ 新建」管理多条笔记，右侧直接显示渲染内容，点「✏️ 编辑」可修改、工具栏点按 H1/H2/H3/加粗/列表等格式，点「✓ 完成」保存。</li>
+<li><strong>记事本：</strong>书签网格里的「📝」大卡片，长按可和图标一样拖动排序；点开面板左侧「＋ 新建」管理多条笔记，右侧直接显示内容；点「✏️ 编辑」进入全屏编辑（自动跟随输入法键盘缩放，不再被遮挡），工具栏点按 H1/H2/H3/加粗/列表等格式，点「完成」保存、「取消」放弃。</li>
 <li><strong>数据隐私：</strong>所有书签与设置仅保存在本地，不上传任何服务器。</li>
 </ul></div></div>
 </div>
@@ -547,8 +561,24 @@ img{-webkit-user-drag:none;}
 <div class="notes-list" id="notesList"></div>
 </aside>
 <section class="notes-main">
-<input class="notes-name" id="notesName" type="text" placeholder="笔记名称" style="display:none" autocomplete="off">
-<div class="note-tools" id="noteTools" style="display:none">
+<div class="notes-view" id="notesView"></div>
+</section>
+</div>
+<div class="notes-foot">
+<button class="nf-edit" id="notesEditBtn" type="button">✏️ 编辑</button>
+<button class="nf-del" id="notesDelBtn" type="button">🗑 删除</button>
+</div>
+</div></div>
+<div class="note-editor-overlay" id="noteEditorOverlay">
+<div class="ne-head">
+<button class="ne-cancel" id="neCancelBtn" type="button">取消</button>
+<input class="ne-name" id="notesName" type="text" placeholder="笔记名称" autocomplete="off">
+<button class="ne-done" id="neDoneBtn" type="button">完成</button>
+</div>
+<div class="ne-body">
+<textarea class="ne-input" id="notesInput" placeholder="在这里写笔记…" autocomplete="off"></textarea>
+</div>
+<div class="ne-tools" id="noteTools">
 <button type="button" data-md="h1">H1</button>
 <button type="button" data-md="h2">H2</button>
 <button type="button" data-md="h3">H3</button>
@@ -559,16 +589,7 @@ img{-webkit-user-drag:none;}
 <button type="button" data-md="code">&lt;/&gt;</button>
 <button type="button" data-md="link">🔗</button>
 </div>
-<div class="notes-view" id="notesView"></div>
-<textarea class="notes-input" id="notesInput" style="display:none"></textarea>
-</section>
 </div>
-<div class="notes-foot">
-<button class="nf-edit" id="notesEditBtn" type="button">✏️ 编辑</button>
-<button class="nf-done" id="notesDoneBtn" type="button" style="display:none">✓ 完成</button>
-<button class="nf-del" id="notesDelBtn" type="button">🗑 删除</button>
-</div>
-</div></div>
 <script>
 (function(){
 var themes={
@@ -880,7 +901,9 @@ var sc=shortcuts[idx];
 if(!sc)return;
 if(sc.bg)return; //自定义文字图标：直接显示文字，跳过favicon探测
 var iconDiv=it.querySelector('.shortcut-icon');
+if(!iconDiv)return; // 记事本大卡片没有小图标, 跳过favicon探测
 var fallback=iconDiv.querySelector('.icon-fallback');
+if(!fallback)return;
 var u=sc.url||'';
 var dh='';try{dh=new URL(/^https?:\/\//i.test(u)?u:'https://'+u).hostname;}catch(e){}
 if(!dh)return;
@@ -1809,8 +1832,22 @@ if(inCode){out.push('<pre><code>'+escNote(codeBuf.join('\n'))+'</code></pre>');}
 flushList();
 return out.join('');
 }
-var notesOverlay=document.getElementById('notesOverlay'),notesListEl=document.getElementById('notesList'),notesViewEl=document.getElementById('notesView'),notesInputEl=document.getElementById('notesInput'),notesNameEl=document.getElementById('notesName'),notesToolsEl=document.getElementById('noteTools'),notesEditBtn=document.getElementById('notesEditBtn'),notesDoneBtn=document.getElementById('notesDoneBtn'),notesDelBtn=document.getElementById('notesDelBtn'),notesCloseBtn=document.getElementById('notesClose'),notesNewBtn=document.getElementById('notesNewBtn');
-var notebooks=[],curNoteId='',notesEditing=false;
+var notesOverlay=document.getElementById('notesOverlay'),notesListEl=document.getElementById('notesList'),notesViewEl=document.getElementById('notesView'),notesEditBtn=document.getElementById('notesEditBtn'),notesDelBtn=document.getElementById('notesDelBtn'),notesCloseBtn=document.getElementById('notesClose'),notesNewBtn=document.getElementById('notesNewBtn');
+var noteEditorOverlay=document.getElementById('noteEditorOverlay'),neCancelBtn=document.getElementById('neCancelBtn'),neDoneBtn=document.getElementById('neDoneBtn'),notesNameEl=document.getElementById('notesName'),notesInputEl=document.getElementById('notesInput'),noteToolsEl=document.getElementById('noteTools');
+var notebooks=[],curNoteId='',noteEditorBackup=null;
+// 键盘适配: 跟随可视视口高度, 输入法弹出时编辑器区域自动缩短, 内容不被遮挡
+function syncKeyboardLayout(){
+  var vv=window.visualViewport;
+  var h=(vv&&vv.height)?vv.height:window.innerHeight;
+  if(h>0)document.documentElement.style.setProperty('--app-h',Math.round(h)+'px');
+}
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize',syncKeyboardLayout);
+  window.visualViewport.addEventListener('scroll',syncKeyboardLayout);
+}
+window.addEventListener('resize',syncKeyboardLayout);
+window.addEventListener('orientationchange',function(){setTimeout(syncKeyboardLayout,200);});
+syncKeyboardLayout();
 function notesLoad(){try{var a=JSON.parse(localStorage.getItem('via_notes')||'[]');if(Array.isArray(a)){notebooks=a.filter(function(n){return n&&n.id&&typeof n.text==='string';}).map(function(n){return{id:String(n.id),name:n.name||'未命名',text:String(n.text||''),updated:n.updated||0};});return;}}catch(e){}notebooks=[];}
 function notesSave(){try{localStorage.setItem('via_notes',JSON.stringify(notebooks));}catch(e){}}
 function genNoteId(){return 'n'+Date.now()+Math.random().toString(36).slice(2,6);}
@@ -1854,74 +1891,75 @@ function renderNotesList(){
     return '<div class="note-item'+(n.id===curNoteId?' active':'')+'" data-id="'+escNote(n.id)+'"><span class="note-item-name">'+escNote(n.name)+'</span><span class="note-item-date">'+fmtNoteDate(n.updated)+'</span></div>';
   }).join(''):'<div class="note-item none" style="cursor:default;opacity:.6">暂无笔记</div>';
 }
-function setNotesEditing(v){
-  notesEditing=v;
-  var has=!!curNote();
-  notesInputEl.style.display=(v&&has)?'':'none';
-  notesViewEl.style.display=(v&&has)?'none':'';
-  notesNameEl.style.display=(v&&has)?'':'none';
-  if(notesToolsEl)notesToolsEl.style.display=(v&&has)?'':'none';
-  if(notesEditBtn)notesEditBtn.style.display=(v&&has)?'none':'';
-  if(notesDoneBtn)notesDoneBtn.style.display=(v&&has)?'':'none';
-}
 function renderNoteMain(){
   var n=curNote();
-  if(!n){notesViewEl.innerHTML='<div class="notes-empty">暂无笔记<br>点左边「＋ 新建」开始写吧</div>';notesViewEl.style.display='';setNotesEditing(false);return;}
-  setNotesEditing(notesEditing);
-  if(notesEditing){
-    notesNameEl.value=n.name||'';
-    notesInputEl.value=n.text||'';
-  }else{
-    var raw=(n.text||'').trim();
-    notesViewEl.innerHTML=raw?mdToHtml(n.text):'<div class="notes-empty">这条笔记还是空的<br>点下方「✏️ 编辑」开始写</div>';
-    notesViewEl.style.display='';
-  }
+  if(!n){notesViewEl.innerHTML='<div class="notes-empty">暂无笔记<br>点左边「＋ 新建」开始写吧</div>';return;}
+  var raw=(n.text||'').trim();
+  notesViewEl.innerHTML=raw?mdToHtml(n.text):'<div class="notes-empty">这条笔记还是空的<br>点下方「✏️ 编辑」开始写</div>';
 }
 function renderNotesPanel(){renderNotesList();renderNoteMain();}
-function stashNote(){
-  if(!notesEditing)return;
-  var n=curNote();if(!n)return;
-  var name=(notesNameEl.value||'').trim();
-  n.name=name||'未命名';
-  n.text=notesInputEl.value;
-  n.updated=Date.now();
-  notesSave();
-}
-function selectNote(id){
-  stashNote();
-  curNoteId=id;
-  notesEditing=false;
-  renderNotesPanel();
-}
+function selectNote(id){curNoteId=id;renderNotesPanel();}
 function openNotes(){
   if(!notesOverlay)return;
   notesLoad();
   var list=sortedNotes();
   curNoteId=list.length?list[0].id:'';
-  notesEditing=false;
   notesOverlay.classList.add('active');
   renderNotesPanel();
 }
-function closeNotes(){stashNote();if(notesOverlay)notesOverlay.classList.remove('active');}
+function closeNotes(){if(notesOverlay)notesOverlay.classList.remove('active');}
+// 全屏编辑器(键盘适配)
+function openNoteEditor(){
+  var n=curNote();if(!n)return;
+  noteEditorBackup={id:n.id,name:n.name||'',text:n.text||''};
+  notesNameEl.value=n.name||'';
+  notesInputEl.value=n.text||'';
+  if(noteEditorOverlay)noteEditorOverlay.classList.add('active');
+  syncKeyboardLayout();
+  try{setTimeout(function(){notesInputEl.focus();},100);}catch(e){}
+}
+function closeNoteEditor(){if(noteEditorOverlay)noteEditorOverlay.classList.remove('active');}
+function doneNoteEdit(){
+  var n=curNote();
+  if(n){
+    var name=(notesNameEl.value||'').trim();
+    n.name=name||'未命名';
+    n.text=notesInputEl.value;
+    n.updated=Date.now();
+    notesSave();
+    renderSc();
+  }
+  noteEditorBackup=null;
+  closeNoteEditor();
+  if(notesOverlay&&notesOverlay.classList.contains('active'))renderNotesPanel();
+}
+function cancelNoteEdit(){
+  var n=curNote();
+  if(n&&noteEditorBackup&&noteEditorBackup.id===n.id){
+    // 新建笔记且什么都没写: 直接丢弃
+    var empty=(notesInputEl.value||'').trim()===''&&(!noteEditorBackup.text||noteEditorBackup.text.trim()==='')&&(!noteEditorBackup.name||noteEditorBackup.name==='新笔记');
+    if(empty){
+      for(var i=0;i<notebooks.length;i++){if(notebooks[i].id===n.id){notebooks.splice(i,1);break;}}
+      notesSave();
+      var list=sortedNotes();
+      curNoteId=list.length?list[0].id:'';
+      renderSc();
+    }
+  }
+  noteEditorBackup=null;
+  closeNoteEditor();
+  if(notesOverlay&&notesOverlay.classList.contains('active'))renderNotesPanel();
+}
 function newNoteInPanel(){
-  stashNote();
   var id=genNoteId();
   notebooks.push({id:id,name:'新笔记',text:'',updated:Date.now()});
   notesSave();
   curNoteId=id;
-  notesEditing=true;
+  renderSc();
   renderNotesPanel();
-  try{setTimeout(function(){notesInputEl.focus();},200);}catch(e){}
-}
-function doneEditNote(){
-  stashNote();
-  notesEditing=false;
-  renderNoteMain();
-  renderNotesList();
-  showToast('已保存');
+  openNoteEditor();
 }
 function deleteNoteCurrent(){
-  stashNote();
   var n=curNote();if(!n)return;
   if(!notesDelBtn)return;
   if(!notesDelBtn.dataset.arm){notesDelBtn.dataset.arm='1';notesDelBtn.textContent='⚠️ 再点一次删除';setTimeout(function(){if(notesDelBtn){delete notesDelBtn.dataset.arm;notesDelBtn.textContent='🗑 删除';}},2500);return;}
@@ -1930,7 +1968,7 @@ function deleteNoteCurrent(){
   notesSave();
   var list=sortedNotes();
   curNoteId=list.length?list[0].id:'';
-  notesEditing=false;
+  renderSc();
   renderNotesPanel();
   showToast('笔记已删除');
 }
@@ -1975,24 +2013,19 @@ function applyNoteMd(kind){
     return;
   }
 }
-function editCurrentNote(){
-  var n=curNote();
-  if(!n){newNoteInPanel();return;}
-  notesEditing=true;
-  renderNoteMain();
-  try{setTimeout(function(){notesInputEl.focus();},150);}catch(e){}
-}
 function bindNotesUI(){
   if(notesListEl)notesListEl.addEventListener('click',function(e){var it=e.target.closest('.note-item');if(!it||!it.dataset.id)return;selectNote(it.dataset.id);});
   if(notesNewBtn)notesNewBtn.addEventListener('click',newNoteInPanel);
-  if(notesEditBtn)notesEditBtn.addEventListener('click',editCurrentNote);
-  if(notesDoneBtn)notesDoneBtn.addEventListener('click',doneEditNote);
+  if(notesEditBtn)notesEditBtn.addEventListener('click',openNoteEditor);
   if(notesDelBtn)notesDelBtn.addEventListener('click',deleteNoteCurrent);
   if(notesCloseBtn)notesCloseBtn.addEventListener('click',closeNotes);
   if(notesOverlay)notesOverlay.addEventListener('click',function(e){if(e.target===notesOverlay)closeNotes();});
-  if(notesToolsEl){
-    notesToolsEl.addEventListener('mousedown',function(e){e.preventDefault();});
-    notesToolsEl.addEventListener('click',function(e){var b=e.target.closest('button[data-md]');if(!b)return;applyNoteMd(b.dataset.md);});
+  if(neCancelBtn)neCancelBtn.addEventListener('click',cancelNoteEdit);
+  if(neDoneBtn)neDoneBtn.addEventListener('click',doneNoteEdit);
+  if(notesNameEl)notesNameEl.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();notesInputEl.focus();}});
+  if(noteToolsEl){
+    noteToolsEl.addEventListener('mousedown',function(e){e.preventDefault();});
+    noteToolsEl.addEventListener('click',function(e){var b=e.target.closest('button[data-md]');if(!b)return;applyNoteMd(b.dataset.md);});
   }
   var nnb=document.getElementById('newNoteBtn');
   if(nnb)nnb.addEventListener('click',function(){
