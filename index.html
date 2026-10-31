@@ -45,11 +45,17 @@ padding:20px 20px 12px;min-height:100vh;
 .search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-secondary);font-size:18px;cursor:pointer;width:30px;height:30px;border-radius:50%;display:none;align-items:center;justify-content:center;z-index:2;}
 .search-clear:hover{background:var(--border);}
 .search-clear.visible{display:flex;}
-.engine-dropdown{position:absolute;left:8px;top:52px;background:var(--card-bg);border:2px solid var(--border);border-radius:14px;box-shadow:var(--shadow-hover);overflow:hidden;z-index:10;display:none;min-width:130px;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));}
+.engine-dropdown{position:absolute;left:8px;top:52px;background:var(--card-bg);border:2px solid var(--border);border-radius:14px;box-shadow:var(--shadow-hover);overflow-y:auto;overflow-x:hidden;z-index:10;display:none;min-width:130px;max-height:320px;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));}
 .engine-dropdown.show{display:block;animation:fadeIn 0.15s ease;}
-.engine-option{padding:11px 18px;cursor:pointer;font-size:14px;transition:background 0.15s;white-space:nowrap;}
+.engine-option{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 18px;cursor:pointer;font-size:14px;transition:background 0.15s;white-space:nowrap;}
 .engine-option:hover{background:var(--border);}
 .engine-option.active{color:var(--accent);font-weight:600;background:var(--accent-light);}
+.engine-del{flex-shrink:0;width:20px;height:20px;border:none;background:none;color:var(--text-secondary);font-size:11px;line-height:1;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.engine-del:hover{color:var(--danger);background:var(--danger-light);}
+.engine-add{color:var(--accent);font-weight:600;justify-content:center;}
+.engine-add:hover{background:var(--accent-light);}
+.engine-hint{font-size:12px;color:var(--text-secondary);line-height:1.7;padding:0 4px;letter-spacing:0.3px;}
+.engine-hint code{color:var(--accent);background:var(--accent-light);padding:1px 5px;border-radius:5px;font-size:11px;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
 .shortcuts{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px;}
 .shortcut-item{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:14px 6px;border-radius:var(--card-radius);background:var(--card-bg);box-shadow:var(--shadow);transition:all 0.2s ease;text-decoration:none;color:var(--text);-webkit-tap-highlight-color:transparent;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));}
@@ -249,19 +255,14 @@ body.edit-mode .sc-delete{display:flex;}
 <button class="search-engine-btn" id="engineBtn">必应</button>
 <input type="text" class="search-box" id="searchInput" placeholder="吃饱了，才有力气冲浪 🌊" autocomplete="off" enterkeyhint="search">
 <button class="search-clear" id="searchClear" title="清除">✕</button>
-<div class="engine-dropdown" id="engineDropdown">
-<div class="engine-option active" data-engine="bing" data-url="https://www.bing.com/search?q=">必应</div>
-<div class="engine-option" data-engine="google" data-url="https://www.google.com/search?q=">谷歌</div>
-<div class="engine-option" data-engine="duckduckgo" data-url="https://duckduckgo.com/?q=">鸭鸭走</div>
-<div class="engine-option" data-engine="sogou" data-url="https://www.sogou.com/web?query=">搜狗</div>
-</div>
+<div class="engine-dropdown" id="engineDropdown"></div>
 </div>
 <div class="shortcuts" id="shortcuts"></div>
 <button class="sc-fold" id="foldBtn" title="展开全部" aria-label="展开全部"><svg class="sc-fold-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path></svg></button>
 </div>
 <div class="footer">
 <div class="footer-row"><span class="deco">◈</span><span class="line"></span><span class="brand">白米饭</span><span class="dot">·</span><span>导航</span><span class="line"></span><span class="deco">◈</span></div>
-<div class="footer-row" style="font-size:10px;opacity:0.4;letter-spacing:1px;">v5.3 · 文件夹排序版<button class="clg-btn" id="clgBtn" type="button">📜 更新内容</button></div>
+<div class="footer-row" style="font-size:10px;opacity:0.4;letter-spacing:1px;">v5.4 · 搜索引擎版<button class="clg-btn" id="clgBtn" type="button">📜 更新内容</button></div>
 </div>
 </div><!-- /page-scroll -->
 <button class="settings-fab" id="settingsBtn" title="设置" aria-label="设置"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M19.14 12.94a7.07 7.07 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.04 7.04 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.58.24-1.12.55-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L2.31 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.05.31-.09.63-.09.94s.04.63.09.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.31.61.22l2.39-.96c.5.39 1.04.71 1.62.94l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.58-.24 1.12-.55 1.62-.94l2.39.96c.22.09.48 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"></path></svg></button>
@@ -279,7 +280,15 @@ body.edit-mode .sc-delete{display:flex;}
 </ul>
 </div>
 <div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#8b5cf6,#e91e8c)">当前版</span><span class="clg-vname">v5.3 · 文件夹排序版</span></div>
+<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#8b5cf6,#e91e8c)">当前版</span><span class="clg-vname">v5.4 · 搜索引擎版</span></div>
+<ul>
+<li>🔍 搜索引擎：百度 / 谷歌 / 必应 / 鸭鸭走 / 搜狗 一键切换</li>
+<li>➕ 「＋ 添加搜索引擎」支持自定义引擎：名称 + 搜索地址（%s 代表搜索词）</li>
+<li>✕ 自定义引擎可删除，设置自动保存在浏览器本地</li>
+</ul>
+</div>
+<div class="clg-ver">
+<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#607d8b,#455a64)">v5.3</span><span class="clg-vname">文件夹排序版</span></div>
 <ul>
 <li>📂 文件夹内长按拖动排序，实时让位，手机 / 电脑均可使用</li>
 <li>⬇️ 文件夹底部「移出」条：把书签拖上去即可移出文件夹、回到主页</li>
@@ -402,12 +411,12 @@ body.edit-mode .sc-delete{display:flex;}
 <li><span class="tag">自定义文字颜色</span>：主文字、次要文字独立取色，实时预览。</li>
 <li><span class="tag">布局调节</span>：页面整体上下微调，底部功能固定不动。</li>
 <li><span class="tag">书签管理</span>：支持 JSON 导入导出备份、一键恢复默认。</li>
-<li><span class="tag">多引擎搜索</span>：必应 / 谷歌 / 鸭鸭走 / 搜狗 一键切换。</li>
+<li><span class="tag">多引擎搜索</span>：百度 / 谷歌 / 必应 / 鸭鸭走 / 搜狗 一键切换，支持添加自定义引擎。</li>
 </ul>
 <p style="margin-top:4px;">白米饭导航，愿你的每次浏览都心情舒畅 🌾</p>
 </div></div>
 <div class="about-panel" id="aboutPanel_guide"><div class="about-block"><ul>
-<li><strong>搜索：</strong>输入关键词按 <span class="tag">回车</span> 搜索；点击左侧按钮切换引擎（<span class="tag">必应</span>/<span class="tag">谷歌</span>/<span class="tag">鸭鸭走</span>/<span class="tag">搜狗</span>）。</li>
+<li><strong>搜索：</strong>输入关键词按 <span class="tag">回车</span> 搜索；点击左侧按钮切换引擎（<span class="tag">百度</span>/<span class="tag">谷歌</span>/<span class="tag">必应</span> 等），点「<span class="tag">＋ 添加搜索引擎</span>」可添加自定义引擎（地址里用 <span class="tag">%s</span> 代表搜索词）。</li>
 <li><strong>打开书签：</strong>点击图标访问对应站点；图标经 <span class="tag">14源高清探测</span> 自动获取并缓存，秒开无闪烁。</li>
 <li><strong>添加书签：</strong>页面空白处 <span class="tag">双击</span>，填写名称与网址；最多显示 <span class="tag">8个</span>，超出自动折叠，点击右上角按钮展开。</li>
 <li><strong>编辑书签：</strong>手机 <span class="tag">长按</span> / 电脑 <span class="tag">右键</span> 图标进入编辑，可修改名称与网址。</li>
@@ -437,6 +446,13 @@ body.edit-mode .sc-delete{display:flex;}
 <div class="modal-handle"></div><div class="modal-title">📁 重命名文件夹</div>
 <div class="modal-field"><label class="modal-label">文件夹名称</label><input class="modal-input" id="folderNameInput" type="text" autocomplete="off"></div>
 <div class="modal-actions"><button class="modal-btn cancel" id="folderNameCancel" type="button">取消</button><button class="modal-btn save" id="folderNameSave" type="button">保存</button></div>
+</div></div>
+<div class="modal-overlay" id="engineAddOverlay"><div class="modal-sheet" id="engineAddSheet">
+<div class="modal-handle"></div><div class="modal-title">＋ 添加搜索引擎</div>
+<div class="modal-field"><label class="modal-label">名称</label><input class="modal-input" id="engineAddName" type="text" placeholder="如：百度" autocomplete="off"></div>
+<div class="modal-field"><label class="modal-label">搜索地址</label><input class="modal-input" id="engineAddUrl" type="text" placeholder="https://www.baidu.com/s?wd=%s" autocomplete="off"></div>
+<p class="engine-hint">用 <code>%s</code> 代表搜索词，例如 <code>https://www.baidu.com/s?wd=%s</code>；没写 %s 会自动补上。</p>
+<div class="modal-actions"><button class="modal-btn cancel" id="engineAddCancel" type="button">取消</button><button class="modal-btn save" id="engineAddSave" type="button">添加</button></div>
 </div></div>
 <script>
 (function(){
@@ -1212,15 +1228,79 @@ setTimeout(updClock,1000-(Date.now()%1000)+30);
 }
 updClock();
 var si=document.getElementById('searchInput'),scClear=document.getElementById('searchClear'),eb=document.getElementById('engineBtn'),ed=document.getElementById('engineDropdown');
-var curEng={name:'必应',url:'https://www.bing.com/search?q=',engine:'bing'};
-var eurm={'百度':'https://www.baidu.com/s?wd=','必应':'https://www.bing.com/search?q=','谷歌':'https://www.google.com/search?q=','鸭鸭走':'https://duckduckgo.com/?q=','搜狗':'https://www.sogou.com/web?query='};
-try{var se=localStorage.getItem('via_engine');if(se){var p=JSON.parse(se);var kn=Object.keys(eurm).find(function(k){return p.name.indexOf(k)>=0;});p.name=kn||p.name||'必应';p.url=eurm[p.name]||p.url;curEng=p;eb.textContent=p.name;}}catch(e){}
-(function(){var m={'必应':'bing','谷歌':'google','鸭鸭走':'duckduckgo','搜狗':'sogou'};var t=m[curEng.name]||curEng.engine;document.querySelectorAll('.engine-option').forEach(function(o){o.classList.toggle('active',o.dataset.engine===t);});})();
+var curEngName='必应';
+try{var seSaved=localStorage.getItem('via_engine');if(seSaved){var seObj=JSON.parse(seSaved);if(seObj&&findEngine(seObj.name))curEngName=seObj.name;}}catch(e){}
+// 搜索引擎: 百度 / 谷歌 / 必应 / 鸭鸭走 / 搜狗 + 自定义引擎(可添加/删除)
+var DEFAULT_ENGINES=[
+{name:'百度',tpl:'https://www.baidu.com/s?wd=%s'},
+{name:'谷歌',tpl:'https://www.google.com/search?q=%s'},
+{name:'必应',tpl:'https://www.bing.com/search?q=%s'},
+{name:'鸭鸭走',tpl:'https://duckduckgo.com/?q=%s'},
+{name:'搜狗',tpl:'https://www.sogou.com/web?query=%s'}
+];
+var customEngines=[];
+try{var ceSaved=localStorage.getItem('via_custom_engines');if(ceSaved){var ceArr=JSON.parse(ceSaved);if(Array.isArray(ceArr))customEngines=ceArr.filter(function(x){return x&&typeof x.name==='string'&&x.name&&x.tpl;}).map(function(x){return({name:x.name,tpl:String(x.tpl).replace(/\{q\}/g,'%s')});});}}catch(e){}
+function allEngines(){return DEFAULT_ENGINES.concat(customEngines);}
+function findEngine(name){var a=allEngines();for(var i=0;i<a.length;i++){if(a[i].name===name)return a[i];}return null;}
+function escEng(s){return String(s==null?'':s).replace(/[<>&"]/g,function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];});}
+if(!findEngine(curEngName))curEngName='必应';
+function saveEngineName(n){curEngName=n;try{localStorage.setItem('via_engine',JSON.stringify({name:n}));}catch(e){}}
+function renderEngineList(){
+var all=allEngines();
+ed.innerHTML=all.map(function(en,i){
+var isC=i>=DEFAULT_ENGINES.length,ci=i-DEFAULT_ENGINES.length;
+return '<div class="engine-option'+(en.name===curEngName?' active':'')+'" data-name="'+escEng(en.name)+'">'+escEng(en.name)+(isC?'<button type="button" class="engine-del" data-del="'+ci+'" title="删除该引擎">✕</button>':'')+'</div>';
+}).join('')+'<div class="engine-option engine-add" id="engineAddItem">＋ 添加搜索引擎</div>';
+eb.textContent=curEngName;
+}
+renderEngineList();
+// 添加搜索引擎弹窗
+var eaOverlay=document.getElementById('engineAddOverlay'),eaName=document.getElementById('engineAddName'),eaUrl=document.getElementById('engineAddUrl'),eaSave=document.getElementById('engineAddSave'),eaCancel=document.getElementById('engineAddCancel');
+function openEngineAdd(){if(!eaOverlay)return;eaOverlay.classList.add('active');eaName.value='';eaUrl.value='';eaName.style.borderColor='';eaUrl.style.borderColor='';setTimeout(function(){eaName.focus();},300);}
+function closeEngineAdd(){if(eaOverlay)eaOverlay.classList.remove('active');}
+function saveEngineAdd(){
+var n=eaName.value.trim(),u=eaUrl.value.trim();
+if(!n){eaName.focus();eaName.style.borderColor='var(--danger)';return;}
+if(!u){eaUrl.focus();eaUrl.style.borderColor='var(--danger)';return;}
+u=u.replace(/\{q\}/g,'%s');
+if(u.indexOf('%s')<0){if(/[=?]$/.test(u))u+='%s';else u+=(u.indexOf('?')>=0?'&':'?')+'q=%s';}
+if(customEngines.some(function(x){return x.name===n&&x.tpl===u;})){showToast('该搜索引擎已存在');return;}
+customEngines.push({name:n,tpl:u});
+try{localStorage.setItem('via_custom_engines',JSON.stringify(customEngines));}catch(e){}
+saveEngineName(n);
+renderEngineList();
+closeEngineAdd();
+showToast('已添加搜索引擎：'+n);
+}
+if(eaSave)eaSave.addEventListener('click',saveEngineAdd);
+if(eaCancel)eaCancel.addEventListener('click',closeEngineAdd);
+if(eaOverlay)eaOverlay.addEventListener('click',function(e){if(e.target===eaOverlay)closeEngineAdd();});
+if(eaName)eaName.addEventListener('keydown',function(e){if(e.key==='Enter')eaUrl.focus();});
+if(eaUrl)eaUrl.addEventListener('keydown',function(e){if(e.key==='Enter')saveEngineAdd();});
 si.addEventListener('input',function(){scClear.classList.toggle('visible',si.value.length>0);});
 scClear.addEventListener('click',function(){si.value='';scClear.classList.remove('visible');si.focus();});
-si.addEventListener('keydown',function(e){if(e.key==='Enter'&&si.value.trim()){window.location.href=curEng.url+encodeURIComponent(si.value.trim());}});
-eb.addEventListener('click',function(e){e.stopPropagation();ed.classList.toggle('show');});
-ed.addEventListener('click',function(e){var o=e.target.closest('.engine-option');if(!o)return;curEng={name:o.textContent.trim(),url:o.dataset.url,engine:o.dataset.engine};eb.textContent=curEng.name;ed.classList.remove('show');document.querySelectorAll('.engine-option').forEach(function(x){x.classList.remove('active');});o.classList.add('active');try{localStorage.setItem('via_engine',JSON.stringify(curEng));}catch(e){}si.focus();});
+si.addEventListener('keydown',function(e){if(e.key==='Enter'&&si.value.trim()){var eng=findEngine(curEngName)||DEFAULT_ENGINES[2];window.location.href=eng.tpl.replace('%s',encodeURIComponent(si.value.trim()));}});
+eb.addEventListener('click',function(e){e.stopPropagation();renderEngineList();ed.classList.toggle('show');});
+ed.addEventListener('click',function(e){
+var del=e.target.closest('.engine-del');
+if(del){
+e.stopPropagation();
+var ci=parseInt(del.dataset.del,10);
+if(isNaN(ci)||!customEngines[ci])return;
+var removed=customEngines.splice(ci,1)[0];
+try{localStorage.setItem('via_custom_engines',JSON.stringify(customEngines));}catch(ex){}
+if(removed&&removed.name===curEngName)saveEngineName('必应');
+renderEngineList();ed.classList.add('show');
+showToast('已删除搜索引擎：'+(removed?removed.name:''));
+return;
+}
+if(e.target.closest('#engineAddItem')){e.stopPropagation();ed.classList.remove('show');openEngineAdd();return;}
+var o=e.target.closest('.engine-option');
+if(!o||!o.dataset.name)return;
+if(findEngine(o.dataset.name))saveEngineName(o.dataset.name);
+renderEngineList();ed.classList.remove('show');
+si.focus();
+});
 document.addEventListener('click',function(e){if(!e.target.closest('#searchWrapper'))ed.classList.remove('show');});
 var so=document.getElementById('settingsOverlay');
 function syncIconModeBtns(){document.querySelectorAll('#iconModeSel .mode-btn').forEach(function(b){b.classList.toggle('active',b.dataset.im===iconMode);});}
