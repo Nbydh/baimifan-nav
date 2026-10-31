@@ -60,25 +60,24 @@ padding:20px 20px 12px;min-height:100vh;
 .add-tile .shortcut-icon{background:transparent;border:2px dashed var(--border);font-size:26px;color:var(--text-secondary);font-weight:400;}
 .add-tile:hover .shortcut-icon,.add-tile:active .shortcut-icon{border-color:var(--accent);color:var(--accent);}
 .add-tile .shortcut-name{color:var(--text-secondary);}
-.note-card{width:100%;background:var(--card-bg);border-radius:var(--card-radius);box-shadow:var(--shadow);padding:14px 16px;display:flex;flex-direction:column;gap:8px;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));}
-.note-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.note-title{font-size:13px;font-weight:600;color:var(--text);letter-spacing:1px;}
-.note-edit{background:none;border:1px solid var(--border);color:var(--text-secondary);font-size:12px;padding:4px 10px;border-radius:10px;cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;}
-.note-edit:hover{color:var(--accent);border-color:var(--accent);}
-.note-body{font-size:13px;line-height:1.7;color:var(--text-secondary);max-height:180px;overflow-y:auto;letter-spacing:0.3px;user-select:text;-webkit-user-select:text;word-break:break-word;}
-.note-body h2,.note-body h3,.note-body h4,.note-body h5,.note-body h6{color:var(--text);margin:8px 0 4px;letter-spacing:0.5px;}
-.note-body h2{font-size:16px;}.note-body h3{font-size:15px;}.note-body h4,.note-body h5,.note-body h6{font-size:14px;}
-.note-body p{margin:2px 0;}
-.note-body a{color:var(--accent);text-decoration:underline;}
-.note-body code{background:var(--bg);padding:1px 5px;border-radius:4px;font-size:12px;color:var(--accent);}
-.note-body pre{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;overflow-x:auto;font-size:12px;line-height:1.6;}
-.note-body pre code{background:none;padding:0;}
-.note-body blockquote{border-left:3px solid var(--accent);padding-left:10px;margin:6px 0;opacity:0.8;}
-.note-body ul,.note-body ol{margin:4px 0;padding-left:20px;}
-.note-body li{margin:2px 0;}
-.note-body hr{border:none;border-top:1px solid var(--border);margin:8px 0;}
-.note-empty{color:var(--text-secondary);opacity:0.6;font-size:12px;letter-spacing:1px;}
-.note-editor{min-height:220px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.7;}
+.note-tools{display:flex;flex-wrap:wrap;gap:6px;}
+.note-tools button{min-width:34px;height:34px;padding:0 8px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.note-tools button:active{transform:scale(.94);}
+.note-tools button:hover{border-color:var(--accent);color:var(--accent);}
+.note-preview{font-size:13px;line-height:1.7;color:var(--text-secondary);letter-spacing:0.3px;user-select:text;-webkit-user-select:text;word-break:break-word;min-height:120px;max-height:40vh;overflow-y:auto;}
+.note-preview h2,.note-preview h3,.note-preview h4,.note-preview h5,.note-preview h6{color:var(--text);margin:8px 0 4px;letter-spacing:0.5px;}
+.note-preview h2{font-size:16px;}.note-preview h3{font-size:15px;}.note-preview h4,.note-preview h5,.note-preview h6{font-size:14px;}
+.note-preview p{margin:2px 0;}
+.note-preview a{color:var(--accent);text-decoration:underline;}
+.note-preview code{background:var(--bg);padding:1px 5px;border-radius:4px;font-size:12px;color:var(--accent);}
+.note-preview pre{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;overflow-x:auto;font-size:12px;line-height:1.6;}
+.note-preview pre code{background:none;padding:0;}
+.note-preview blockquote{border-left:3px solid var(--accent);padding-left:10px;margin:6px 0;opacity:0.8;}
+.note-preview ul,.note-preview ol{margin:4px 0;padding-left:20px;}
+.note-preview li{margin:2px 0;}
+.note-preview hr{border:none;border-top:1px solid var(--border);margin:8px 0;}
+.note-editor{min-height:200px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.7;}
+.note-icon{--icon-bg:#8b5cf6;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
 .shortcuts{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px;}
 .shortcut-item{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:14px 6px;border-radius:var(--card-radius);background:var(--card-bg);box-shadow:var(--shadow);transition:all 0.2s ease;text-decoration:none;color:var(--text);-webkit-tap-highlight-color:transparent;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));}
@@ -283,14 +282,10 @@ body.edit-mode .sc-delete{display:flex;}
 </div>
 <div class="shortcuts" id="shortcuts"></div>
 <button class="sc-fold" id="foldBtn" title="展开全部" aria-label="展开全部"><svg class="sc-fold-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path></svg></button>
-<div class="note-card" id="noteCard">
-<div class="note-head"><span class="note-title">📝 记事本</span><button class="note-edit" id="noteEditBtn" type="button">✏️ 编辑</button></div>
-<div class="note-body" id="noteBody"></div>
-</div>
 </div>
 <div class="footer">
 <div class="footer-row"><span class="deco">◈</span><span class="line"></span><span class="brand">白米饭</span><span class="dot">·</span><span>导航</span><span class="line"></span><span class="deco">◈</span></div>
-<div class="footer-row" style="font-size:10px;opacity:0.4;letter-spacing:1px;">v5.6 · 记事本版<button class="clg-btn" id="clgBtn" type="button">📜 更新内容</button></div>
+<div class="footer-row" style="font-size:10px;opacity:0.4;letter-spacing:1px;">v5.7 · 记事本加强版<button class="clg-btn" id="clgBtn" type="button">📜 更新内容</button></div>
 </div>
 </div><!-- /page-scroll -->
 <button class="settings-fab" id="settingsBtn" title="设置" aria-label="设置"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M19.14 12.94a7.07 7.07 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.04 7.04 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.58.24-1.12.55-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L2.31 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.05.31-.09.63-.09.94s.04.63.09.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.31.61.22l2.39-.96c.5.39 1.04.71 1.62.94l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.58-.24 1.12-.55 1.62-.94l2.39.96c.22.09.48 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"></path></svg></button>
@@ -308,7 +303,16 @@ body.edit-mode .sc-delete{display:flex;}
 </ul>
 </div>
 <div class="clg-ver">
-<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#8b5cf6,#e91e8c)">当前版</span><span class="clg-vname">v5.6 · 记事本版</span></div>
+<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#8b5cf6,#e91e8c)">当前版</span><span class="clg-vname">v5.7 · 记事本加强版</span></div>
+<ul>
+<li>📝 记事本升级为可拖动小组件，和书签图标一样拖动排序</li>
+<li>🗂 支持多个记事本：编辑器内「＋ 新建记事本」或设置里新建</li>
+<li>⌨️ 编辑工具栏：点按 H1/H2/H3 选标题级别、加粗、列表、引用、代码、链接，不用手打符号</li>
+<li>👁 一键预览 Markdown 渲染效果</li>
+</ul>
+</div>
+<div class="clg-ver">
+<div class="clg-vhead"><span class="clg-vtag" style="background:linear-gradient(135deg,#607d8b,#455a64)">v5.6</span><span class="clg-vname">记事本版</span></div>
 <ul>
 <li>📝 新增「记事本」小组件：支持 Markdown 编辑与渲染</li>
 <li>标题 / 加粗 / 斜体 / 列表 / 引用 / 代码块 / 链接均可使用</li>
@@ -402,6 +406,9 @@ body.edit-mode .sc-delete{display:flex;}
 <button class="io-btn" id="importBtn">📥 导入书签</button>
 <button class="io-btn danger" id="resetBtn">🔄 恢复默认</button>
 </div><input type="file" id="importFileInput" accept=".json" style="display:none;"></div>
+<div class="settings-section"><div class="settings-section-title">📝 记事本</div><div class="io-actions">
+<button class="io-btn" id="newNoteBtn">＋ 新建记事本</button>
+</div></div>
 <div class="settings-section"><div class="settings-section-title">🔤 书签图标</div><div class="mode-selector" id="iconModeSel">
 <button class="mode-btn" data-im="icon">🖼 图标</button>
 <button class="mode-btn" data-im="text">🔤 文字</button>
@@ -457,7 +464,7 @@ body.edit-mode .sc-delete{display:flex;}
 <li><span class="tag">布局调节</span>：页面整体上下微调，底部功能固定不动。</li>
 <li><span class="tag">书签管理</span>：支持 JSON 导入导出备份、一键恢复默认。</li>
 <li><span class="tag">多引擎搜索</span>：百度 / 谷歌 / 必应 / 鸭鸭走 / 搜狗 一键切换，支持添加自定义引擎。</li>
-<li><span class="tag">记事本</span>：Markdown 小组件，随手记，自动保存。</li>
+<li><span class="tag">记事本</span>：可拖动的 Markdown 小组件，支持多个记事本、点按标题格式与预览。</li>
 </ul>
 <p style="margin-top:4px;">白米饭导航，愿你的每次浏览都心情舒畅 🌾</p>
 </div></div>
@@ -476,7 +483,7 @@ body.edit-mode .sc-delete{display:flex;}
 <li><strong>布局调节：</strong>「页面整体」滑块微调内容位置，底部功能区固定。</li>
 <li><strong>书签备份：</strong>书签可导出 JSON / 导入恢复 / 一键恢复默认。</li>
 <li><strong>更新内容：</strong>页脚「<span class="tag">📜 更新内容</span>」查看版本更新日志。</li>
-<li><strong>记事本：</strong>页面下方「<span class="tag">📝 记事本</span>」小组件，点击「✏️ 编辑」写笔记，支持 <span class="tag">Markdown</span>（# 标题、**加粗**、- 列表、`代码`、[链接](url)），保存后自动渲染。</li>
+<li><strong>记事本：</strong>书签网格里的「📝」小组件，和图标一样可拖动排序；点击打开编辑，工具栏点按 H1/H2/H3 选择标题级别、加粗、列表等，点「👁 预览」看排版；支持多个记事本（编辑器内「＋ 新建记事本」或设置里新建）。</li>
 <li><strong>数据隐私：</strong>所有书签与设置仅保存在本地，不上传任何服务器。</li>
 </ul></div></div>
 </div>
@@ -502,9 +509,24 @@ body.edit-mode .sc-delete{display:flex;}
 <div class="modal-actions"><button class="modal-btn cancel" id="engineAddCancel" type="button">取消</button><button class="modal-btn save" id="engineAddSave" type="button">添加</button></div>
 </div></div>
 <div class="modal-overlay" id="noteOverlay"><div class="modal-sheet" id="noteSheet">
-<div class="modal-handle"></div><div class="modal-title">📝 记事本 · Markdown</div>
-<textarea class="modal-input note-editor" id="noteEditor" placeholder="支持 Markdown：# 标题、**加粗**、- 列表、`代码`、[链接](url)"></textarea>
+<div class="modal-handle"></div><div class="modal-title" id="noteTitleTxt">📝 记事本</div>
+<div class="modal-field"><label class="modal-label">名称</label><input class="modal-input" id="noteTitle" type="text" placeholder="记事本名称" autocomplete="off"></div>
+<div class="note-tools" id="noteTools">
+<button type="button" data-md="h1">H1</button>
+<button type="button" data-md="h2">H2</button>
+<button type="button" data-md="h3">H3</button>
+<button type="button" data-md="b"><b>B</b></button>
+<button type="button" data-md="i"><i>I</i></button>
+<button type="button" data-md="ul">•</button>
+<button type="button" data-md="quote">❝</button>
+<button type="button" data-md="code">&lt;/&gt;</button>
+<button type="button" data-md="link">🔗</button>
+<button type="button" id="notePreviewBtn">👁 预览</button>
+</div>
+<textarea class="modal-input note-editor" id="noteEditor" placeholder="在这里写笔记…（上方按钮可插入标题/加粗等格式）"></textarea>
+<div class="note-preview" id="notePreview" style="display:none"></div>
 <div class="modal-actions"><button class="modal-btn cancel" id="noteCancel" type="button">取消</button><button class="modal-btn save" id="noteSave" type="button">保存</button></div>
+<div class="modal-actions"><button class="modal-btn cancel" id="noteNewBtn" type="button">＋ 新建记事本</button><button class="modal-btn cancel" id="noteDelBtn" type="button">🗑 删除</button></div>
 </div></div>
 <script>
 (function(){
@@ -795,6 +817,10 @@ var addTile='<div class="shortcut-item add-tile" title="添加书签" aria-label
 var html=(tot?disp.map(function(s,i){
 var esc=function(v){return String(v==null?'':v).replace(/[<>&]/g,function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});};
 var ic;
+if(s&&s.w){ // 记事本小组件
+  ic='<div class="shortcut-icon note-icon"><svg viewBox="0 0 24 24" width="26" height="26" fill="#fff"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg></div>';
+  return'<div class="shortcut-item widget-item" data-index="'+i+'"><button class="sc-delete" type="button" aria-label="删除">✕</button>'+ic+'<span class="shortcut-name">'+esc(s.name)+'</span></div>';
+}
 if(s&&s.f){ // 文件夹
 ic='<div class="shortcut-icon folder-icon"><svg viewBox="0 0 24 24" width="26" height="26" fill="#fff"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg><span class="folder-count">'+(s.items?s.items.length:0)+'</span></div>';
 }else{
@@ -943,7 +969,7 @@ function dragOver(over,fi){
 function doMerge(di,ti){
   if(di===ti)return;
   var a=shortcuts[di],b=shortcuts[ti];
-  if(!a||!b)return;
+  if(!a||!b||a.w||b.w)return;
   if(b.f){ // 拖到文件夹上: 加入
     if(a.f){b.items=b.items.concat(a.items);}else{b.items.push(a);}
     shortcuts.splice(di,1);
@@ -991,14 +1017,16 @@ function bindDragEvents(type){
     // 1) 停在图标中央: 进入合并判定(停留片刻成文件夹), 不做让位
     var center=findItem(x,y,true);
     if(center&&center!==dragItem){
-      if(center!==hoverTarget){
-        clearHover();hoverTarget=center;
-        center.classList.add('folder-drop');
-        if(dragGhost)dragGhost.classList.add('merge-ready');
-        var ci=parseInt(center.dataset.index,10),di=parseInt(dragItem.dataset.index,10);
-        hoverTimer=setTimeout(function(){if(dragItem&&hoverTarget===center)doMerge(di,ci);},MERGE_HOLD);
+      var di3=parseInt(dragItem.dataset.index,10),ci3=parseInt(center.dataset.index,10);
+      if(!((shortcuts[di3]&&shortcuts[di3].w)||(shortcuts[ci3]&&shortcuts[ci3].w))){
+        if(center!==hoverTarget){
+          clearHover();hoverTarget=center;
+          center.classList.add('folder-drop');
+          if(dragGhost)dragGhost.classList.add('merge-ready');
+          hoverTimer=setTimeout(function(){if(dragItem&&hoverTarget===center)doMerge(di3,ci3);},MERGE_HOLD);
+        }
+        return;
       }
-      return;
     }
     clearHover();
     // 2) 让位排序: 仅当手指越过目标图标中线才交换, 避免拖过即乱跳、合并时目标被移走
@@ -1048,6 +1076,7 @@ function onItemClick(it){
   if(it.classList.contains('add-tile')){openModal(-1);return;}
   var idx=parseInt(it.dataset.index);
   var sc=shortcuts[idx];
+  if(sc&&sc.w){openNoteEditor(idx);return;}
   if(sc&&sc.f){
     if(editMode){openFolderRename(idx);}else{openFolderView(idx);}
     return;
@@ -1120,12 +1149,13 @@ scCont.addEventListener('contextmenu',function(e){
   if(dragItem||dragStarting)return;
   var it=e.target.closest('.shortcut-item');if(!it)return;e.preventDefault();
   var idx=parseInt(it.dataset.index);
-  if(shortcuts[idx]&&shortcuts[idx].f){openFolderRename(idx);}else{openModal(idx);}
+  var sx=shortcuts[idx];
+  if(sx&&sx.w){openNoteEditor(idx);}else if(sx&&sx.f){openFolderRename(idx);}else{openModal(idx);}
 });
 // 触屏长按统一阻止浏览器默认菜单(复制/选择等)，避免与长按拖动排序冲突；输入框保留
 document.addEventListener('contextmenu',function(e){
   if(e.button===2)return;
-  if(e.target.closest('input,textarea,.note-body'))return;
+  if(e.target.closest('input,textarea'))return;
   e.preventDefault();
 });
 // 桌面: 长按拖动排序 + 双击编辑
@@ -1687,9 +1717,7 @@ document.getElementById('folderNameSave').addEventListener('click',saveFolderNam
 document.getElementById('folderNameCancel').addEventListener('click',function(){frOverlay.classList.remove('active');});
 frOverlay.addEventListener('click',function(e){if(e.target===frOverlay)frOverlay.classList.remove('active');});
 frInput.addEventListener('keydown',function(e){if(e.key==='Enter')saveFolderName();});
-// 记事本小组件(Markdown)
-var noteText='';
-try{noteText=localStorage.getItem('via_note')||'';}catch(e){}
+// 记事本小组件(Markdown·可拖动·支持多个)
 function escNote(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function inlineMd(s){
 var tokens=[];
@@ -1728,22 +1756,136 @@ if(inCode){out.push('<pre><code>'+escNote(codeBuf.join('\n'))+'</code></pre>');}
 flushList();
 return out.join('');
 }
-function renderNote(){
-var nb=document.getElementById('noteBody');if(!nb)return;
-if(!noteText||!noteText.trim()){nb.innerHTML='<div class="note-empty">点击「✏️ 编辑」写点什么吧…</div>';return;}
-nb.innerHTML=mdToHtml(noteText);
+var noteOverlay=document.getElementById('noteOverlay'),noteEditor=document.getElementById('noteEditor'),notePreview=document.getElementById('notePreview'),noteTitleInput=document.getElementById('noteTitle'),noteTitleTxt=document.getElementById('noteTitleTxt'),noteToolsEl=document.getElementById('noteTools');
+var noteEditIdx=-1;
+function openNoteEditor(idx){
+var s=(idx>=0&&shortcuts[idx]);
+if(!s||!s.w)return;
+noteEditIdx=idx;
+noteTitleInput.value=s.name||'';
+noteEditor.value=s.text||'';
+noteEditor.style.display='';
+if(notePreview){notePreview.style.display='none';notePreview.innerHTML='';}
+if(noteToolsEl)noteToolsEl.style.display='';
+if(noteTitleTxt)noteTitleTxt.textContent='📝 记事本';
+var pb=document.getElementById('notePreviewBtn');if(pb){pb.textContent='👁 预览';}
+if(noteOverlay)noteOverlay.classList.add('active');
+try{setTimeout(function(){noteEditor.focus();},300);}catch(e){}
 }
-var noteOverlay=document.getElementById('noteOverlay'),noteEditor=document.getElementById('noteEditor');
-function openNote(){if(!noteOverlay||!noteEditor)return;noteEditor.value=noteText;noteOverlay.classList.add('active');try{setTimeout(function(){noteEditor.focus();},300);}catch(e){}}
-function closeNote(){if(noteOverlay)noteOverlay.classList.remove('active');}
-function saveNote(){noteText=noteEditor.value;try{localStorage.setItem('via_note',noteText);}catch(e){}renderNote();closeNote();showToast('记事本已保存');}
-var noteEditBtn=document.getElementById('noteEditBtn'),noteBodyEl=document.getElementById('noteBody'),noteSaveEl=document.getElementById('noteSave'),noteCancelEl=document.getElementById('noteCancel');
-if(noteEditBtn)noteEditBtn.addEventListener('click',openNote);
-if(noteBodyEl)noteBodyEl.addEventListener('click',function(e){if(e.target.closest('a'))return;openNote();});
+function closeNoteEditor(){if(noteOverlay)noteOverlay.classList.remove('active');}
+function applyNoteToItem(){
+var s=(noteEditIdx>=0&&shortcuts[noteEditIdx]);
+if(!s||!s.w)return false;
+var t=noteTitleInput.value.trim();
+s.name=t||'记事本';
+s.text=noteEditor.value;
+return true;
+}
+function saveNote(){if(applyNoteToItem()){saveSc();renderSc();}closeNoteEditor();showToast('记事本已保存');}
+function deleteNote(){
+var s=(noteEditIdx>=0&&shortcuts[noteEditIdx]);
+if(!s||!s.w)return;
+var b=document.getElementById('noteDelBtn');if(!b)return;
+if(!b.dataset.arm){b.dataset.arm='1';b.textContent='⚠️ 再点一次删除';setTimeout(function(){delete b.dataset.arm;b.textContent='🗑 删除';},2500);return;}
+delete b.dataset.arm;b.textContent='🗑 删除';
+shortcuts.splice(noteEditIdx,1);
+saveSc();renderSc();closeNoteEditor();showToast('记事本已删除');
+}
+function newNote(){
+if(applyNoteToItem()){saveSc();renderSc();}
+shortcuts.push({w:1,name:'记事本',text:''});
+saveSc();renderSc();
+openNoteEditor(shortcuts.length-1);
+showToast('已新建记事本');
+}
+function toggleNotePreview(){
+if(!notePreview)return;
+var showing=(notePreview.style.display!=='none');
+var pb=document.getElementById('notePreviewBtn');
+if(!showing){
+notePreview.innerHTML=mdToHtml(noteEditor.value||'');
+notePreview.style.display='block';
+noteEditor.style.display='none';
+if(noteToolsEl)noteToolsEl.style.display='none';
+if(pb)pb.textContent='✏️ 编辑';
+}else{
+noteEditor.style.display='';
+notePreview.style.display='none';
+if(noteToolsEl)noteToolsEl.style.display='';
+if(pb)pb.textContent='👁 预览';
+}
+}
+function applyNoteMd(kind){
+var ta=noteEditor;if(!ta)return;
+var val=ta.value||'';
+var start=(ta.selectionStart==null)?val.length:ta.selectionStart;
+var end=(ta.selectionEnd==null)?start:ta.selectionEnd;
+function setVal(v,s,e){ta.value=v;try{ta.focus();ta.setSelectionRange(s,e);}catch(x){}}
+var sel=val.slice(start,end);
+function wrap(mark,ph){
+if(sel){setVal(val.slice(0,start)+mark+sel+mark+val.slice(end),start+mark.length,end+mark.length);return;}
+var ins=mark+(ph||'')+mark;
+setVal(val.slice(0,start)+ins+val.slice(end),start+mark.length,start+mark.length+(ph?ph.length:0));
+}
+if(kind==='h1'||kind==='h2'||kind==='h3'){
+var n=parseInt(kind.charAt(1),10);
+var ls=val.lastIndexOf('\n',start-1)+1;
+var le=val.indexOf('\n',end);if(le<0)le=val.length;
+var line=val.slice(ls,le);
+var m=line.match(/^(#{1,6})\s+/);
+var newLine;
+if(m&&m[1].length===n){newLine=line.replace(/^(#{1,6})\s+/,'');}
+else{newLine=['','# ','## ','### '][Math.min(n,3)]+line.replace(/^(#{1,6})\s+/,'');}
+var nv=val.slice(0,ls)+newLine+val.slice(le);
+setVal(nv,ls,ls+newLine.length);
+return;
+}
+if(kind==='b'){wrap('**','加粗');return;}
+if(kind==='i'){wrap('*','斜体');return;}
+if(kind==='code'){wrap('`','代码');return;}
+if(kind==='ul'||kind==='quote'){
+var mk=(kind==='ul')?'- ':'> ';
+var ls2=val.lastIndexOf('\n',start-1)+1;
+var nv2=val.slice(0,ls2)+mk+val.slice(ls2);
+setVal(nv2,start+mk.length,end+mk.length);
+return;
+}
+if(kind==='link'){
+if(sel){var ins2='['+sel+'](https://)';setVal(val.slice(0,start)+ins2+val.slice(end),start+ins2.length,start+ins2.length);}
+else{var ins3='[链接](https://)';setVal(val.slice(0,start)+ins3+val.slice(end),start+1,start+1+2);}
+return;
+}
+}
+var noteSaveEl=document.getElementById('noteSave'),noteCancelEl=document.getElementById('noteCancel'),noteNewEl=document.getElementById('noteNewBtn'),noteDelEl=document.getElementById('noteDelBtn'),notePreviewBtnEl=document.getElementById('notePreviewBtn');
 if(noteSaveEl)noteSaveEl.addEventListener('click',saveNote);
-if(noteCancelEl)noteCancelEl.addEventListener('click',closeNote);
-if(noteOverlay)noteOverlay.addEventListener('click',function(e){if(e.target===noteOverlay)closeNote();});
-renderNote();
+if(noteCancelEl)noteCancelEl.addEventListener('click',closeNoteEditor);
+if(noteNewEl)noteNewEl.addEventListener('click',newNote);
+if(noteDelEl)noteDelEl.addEventListener('click',deleteNote);
+if(notePreviewBtnEl)notePreviewBtnEl.addEventListener('click',toggleNotePreview);
+if(noteOverlay)noteOverlay.addEventListener('click',function(e){if(e.target===noteOverlay)closeNoteEditor();});
+if(noteToolsEl){
+noteToolsEl.addEventListener('mousedown',function(e){e.preventDefault();});
+noteToolsEl.addEventListener('click',function(e){
+var b=e.target.closest('button[data-md]');
+if(!b)return;
+applyNoteMd(b.dataset.md);
+});
+}
+// 旧版单记事本自动迁移为小组件
+var legacyNote='';
+try{legacyNote=localStorage.getItem('via_note')||'';}catch(e){}
+if(legacyNote&&legacyNote.trim()&&!shortcuts.some(function(s){return s&&s.w;})){
+shortcuts.push({w:1,name:'记事本',text:legacyNote});
+saveSc();
+}
+// 设置里「新建记事本」
+var newNoteBtn=document.getElementById('newNoteBtn');
+if(newNoteBtn)newNoteBtn.addEventListener('click',function(){
+var soEl=document.getElementById('settingsOverlay');if(soEl)soEl.classList.remove('active');
+shortcuts.push({w:1,name:'记事本',text:''});
+saveSc();renderSc();
+openNoteEditor(shortcuts.length-1);
+});
 applyTheme();updateBgLayer();sfFolded=shortcuts.length>MAX_VIS;renderSc();applyLayout();applyTimeColors();si.focus();
 })();
 </script>
